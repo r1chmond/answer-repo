@@ -14,7 +14,7 @@ class BookSerializer(serializers.ModelSerializer):
 class SolutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Solution
-        fields = ('book', 'chapter', 'chapter_number', 'exercise_number', 'answer')
+        fields = ('book', 'chapter_title', 'chapter_number', 'exercise_number', 'answer')
 
 
 

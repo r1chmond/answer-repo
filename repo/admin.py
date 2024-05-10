@@ -9,7 +9,7 @@ class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author')
 
 class SolutionAdmin(admin.ModelAdmin):
-    list_display = ('book', 'chapter', 'chapter_number', 'exercise_number', 'answer')
+    list_display = ('book', 'chapter_title', 'chapter_number', 'exercise_number', 'answer')
 
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Book, BookAdmin)

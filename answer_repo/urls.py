@@ -21,6 +21,8 @@ from repo import views
 
 router = DefaultRouter()
 router.register(r'solutions', views.SolutionView, 'solution')
+router.register(r'books', views.BookView, 'book')
+router.register(r'blogposts', views.BlogPostView, 'blog')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
