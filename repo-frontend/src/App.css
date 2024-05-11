@@ -3,7 +3,11 @@
 :root {
     --bg-color: rgb(40, 40, 40);
     --txt-color: white;
-    --main-font: IBM Plex Mono;
+
+    /*font sizes*/
+    --font-sml: 13px;
+    --font-med: 16px;
+    --font-lrg: 20px;
 }
 *,
 *::before,
@@ -21,9 +25,15 @@
     margin-top: 15px;
 }
 
+tr {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
 .custom-body {
   color: var(--txt-color);
-  font-family: var(--main-font), monospace;
+  font-family: IBM Plex Mono, monospace;
+  font-size: var(--font-med);
   background-color: var(--bg-color);
   height: 100vh;
 }
@@ -32,6 +42,9 @@
     height: 100vh;
 }
 
+#list-container {
+    border-radius: 5px;
+}
 .search-container {
     margin: 20px 0px;
 }
@@ -42,4 +55,34 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+/* book listing styles*/
+#book-list-row {
+    border: solid grey 1px;
+    border-radius: 3px;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
     
+}
+
+#book-list-row:hover {
+    cursor: pointer;
+    background-color: rgb(60, 60, 60) !important;
+}
+
+#book-edition-cell {
+   text-align: center;
+}
+
+
+.cell {
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+    text-align: left;
+    padding: 0 10px;
+}
+.footer{
+    font-size: var(--font-sml);
+}
