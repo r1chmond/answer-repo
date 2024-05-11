@@ -1,7 +1,9 @@
+
+
 :root {
     --bg-color: rgb(40, 40, 40);
     --txt-color: white;
-    --main-font: Sono;
+    --main-font: IBM Plex Mono;
 }
 *,
 *::before,
@@ -16,12 +18,12 @@
 }
 
 #root {
-    margin: 5px 50px;
+    margin-top: 15px;
 }
 
-body {
+.custom-body {
   color: var(--txt-color);
-  font-family: var(--font-main), sans-serif;
+  font-family: var(--main-font), monospace;
   background-color: var(--bg-color);
   height: 100vh;
 }
@@ -34,3 +36,10 @@ body {
     margin: 20px 0px;
 }
 
+
+.mb-3 {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+    

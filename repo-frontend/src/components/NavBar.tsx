@@ -3,12 +3,12 @@ function NavBar() {
     <ul className="nav nav-tabs">
       <li className="nav-item">
         <a className="nav-link active" aria-current="page" href="#">
-          Active
+          Textbook Solutions
         </a>
       </li>
       <li className="nav-item">
         <a className="nav-link" href="#">
-          Link
+          Blog Posts
         </a>
       </li>
     </ul>
