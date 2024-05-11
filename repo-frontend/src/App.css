@@ -63,7 +63,7 @@ tr {
     margin-top: 5px;
     display: flex;
     flex-direction: row;
-    
+    transition: 0.3s;
 }
 
 #book-list-row:hover {
