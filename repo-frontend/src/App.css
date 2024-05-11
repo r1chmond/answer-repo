@@ -25,9 +25,8 @@
     margin-top: 15px;
 }
 
-tr {
-    border-collapse: separate;
-    border-spacing: 0 8px;
+.nav-item:hover {
+    cursor: pointer;
 }
 
 .custom-body {
