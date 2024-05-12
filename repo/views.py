@@ -5,8 +5,14 @@ from .models import *
 
 class SolutionView(viewsets.ModelViewSet):
     serializer_class = SolutionSerializer
-    queryset = Solution.objects.all()
 
+    def get_queryset(self):
+        book_id = self.request.query_params.get('book_id')
+        if book_id:
+            return Solution.objects.filter(book=book_id)
+        else:
+            return Solution.objects.all()
+        
 class BookView(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     queryset = Book.objects.all()

@@ -13,7 +13,10 @@ const TabButton: React.FC<TabButtonProps> = ({
 }) => {
   return (
     <li className="nav-item">
-      <a className={`nav-link ${isActive ? "active" : ""}`} onClick={onClick}>
+      <a
+        className={`nav-link ${isActive ? "active" : "text-light"}`}
+        onClick={onClick}
+      >
         {children}
       </a>
     </li>

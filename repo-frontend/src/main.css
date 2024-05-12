@@ -5,9 +5,9 @@
     --txt-color: white;
 
     /*font sizes*/
-    --font-sml: 13px;
-    --font-med: 16px;
-    --font-lrg: 20px;
+    --font-sml: 12px;
+    --font-med: 14px;
+    --font-lrg: 18px;
 }
 *,
 *::before,
@@ -23,6 +23,10 @@
 
 #root {
     margin-top: 15px;
+}
+
+.anchor-link {
+    text-decoration: none;
 }
 
 .nav-item:hover {
@@ -46,6 +50,7 @@
 }
 .search-container {
     margin: 20px 0px;
+    display: flex;
 }
 
 
@@ -85,3 +90,6 @@
 .footer{
     font-size: var(--font-sml);
 }
+
+
+/* Blog Styles */

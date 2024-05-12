@@ -1,22 +1,40 @@
-import NavBar from "../components/NavBar";
-import SearchBar from "../components/SearchBar";
-import Book from "../components/Book";
+import { useState, useTransition } from "react";
+import TabButton from "../tabs/TabButton";
+import BlogPostTab from "../tabs/BlogPostTab";
+import TextbookSolutionTab from "../tabs/TextbookSolutionTab";
+import "../main.css";
 
-function Homepage() {
+function HomePage() {
+  const [isPending, startTransition] = useTransition();
+  const [tab, setTab] = useState<string>("textbookSolutions");
+
+  function selectTab(nextTab: string): void {
+    startTransition(() => {
+      setTab(nextTab);
+    });
+  }
+
   return (
     <>
-      <nav>
-        <NavBar />
-      </nav>
-      <div className="search-container">
-        <SearchBar />
-      </div>
-      <div id="list-container" className="container bg-dark">
-        <Book />
-      </div>
-      <div className="footer">copyright</div>
+      <ul className="nav nav-tabs">
+        <TabButton
+          isActive={tab === "textbookSolutions"}
+          onClick={() => selectTab("textbookSolutions")}
+        >
+          Textbook Solutions
+        </TabButton>
+        <TabButton
+          isActive={tab === "blogpost"}
+          onClick={() => selectTab("blogpost")}
+        >
+          Blog Posts
+        </TabButton>
+      </ul>
+
+      {tab === "textbookSolutions" && <TextbookSolutionTab />}
+      {tab === "blogpost" && <BlogPostTab />}
     </>
   );
 }
 
-export default Homepage;
+export default HomePage;

@@ -1,5 +1,14 @@
+import SearchBar from "../components/SearchBar";
+
 function BlogPostTab() {
-  return <h1> Blog Posts</h1>;
+  return (
+    <>
+      <div className="search-container">
+        <SearchBar />
+      </div>
+      <div className="container bg-dark">Pending</div>
+    </>
+  );
 }
 
 export default BlogPostTab;

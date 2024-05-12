@@ -1,16 +1,12 @@
-import NavBar from "./components/NavBar";
-import SearchBar from "./components/SearchBar";
-import Solution from "./components/Solution";
-import { useState, useTransition, ReactElement } from "react";
+import { useState, useTransition } from "react";
 import TabButton from "./tabs/TabButton";
 import BlogPostTab from "./tabs/BlogPostTab";
 import TextbookSolutionTab from "./tabs/TextbookSolutionTab";
 import "./App.css";
-import Book from "./components/Book";
 
 function App() {
   const [isPending, startTransition] = useTransition();
-  const [tab, setTab] = useState<string>("about");
+  const [tab, setTab] = useState<string>("textbookSolutions");
 
   function selectTab(nextTab: string): void {
     startTransition(() => {
