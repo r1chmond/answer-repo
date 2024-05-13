@@ -7,11 +7,22 @@ class SolutionView(viewsets.ModelViewSet):
     serializer_class = SolutionSerializer
 
     def get_queryset(self):
-        book_id = self.request.query_params.get('book_id')
-        if book_id:
-            return Solution.objects.filter(book=book_id)
+        chapter_id = self.request.query_params.get('chapter_id')
+        if chapter_id:
+            return Solution.objects.filter(chapter=chapter_id)
         else:
             return Solution.objects.all()
+
+class ChapterView(viewsets.ModelViewSet):
+    serializer_class = ChapterSerializer
+    
+    def get_queryset(self):
+        book_id = self.request.query_params.get('book_id')
+        if book_id:
+            return Chapter.objects.filter(book=book_id)
+        else:
+            return Chapter.objects.all()
+        
         
 class BookView(viewsets.ModelViewSet):
     serializer_class = BookSerializer

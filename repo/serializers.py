@@ -10,11 +10,15 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'
-
+class ChapterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chapter
+        fields = '__all__'
+        
 class SolutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Solution
-        fields = ('id', 'book', 'chapter_title', 'chapter_number', 'exercise_number', 'answer')
+        fields = '__all__' 
 
 
 
