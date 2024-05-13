@@ -1,5 +1,6 @@
 import SearchBar from "../components/SearchBar";
 import Book from "../components/Book";
+import NavBar from "../components/NavBar";
 
 function TextbookSolutionTab() {
   return (

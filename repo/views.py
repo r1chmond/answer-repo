@@ -26,7 +26,13 @@ class ChapterView(viewsets.ModelViewSet):
         
 class BookView(viewsets.ModelViewSet):
     serializer_class = BookSerializer
-    queryset = Book.objects.all()
+
+    def get_queryset(self):
+        book_id = self.request.query_params.get('book_id')
+        if book_id:
+            return Book.objects.filter(id=book_id)
+        else:
+            return Book.objects.all()
 
 class BlogPostView(viewsets.ModelViewSet):
     serializer_class = BlogPostSerializer

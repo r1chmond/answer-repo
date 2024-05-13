@@ -1,6 +1,7 @@
 import { useState, useTransition } from "react";
 import TabButton from "../tabs/TabButton";
 import BlogPostTab from "../tabs/BlogPostTab";
+import NavBar from "../components/NavBar";
 import TextbookSolutionTab from "../tabs/TextbookSolutionTab";
 import "../main.css";
 
@@ -16,6 +17,10 @@ function HomePage() {
 
   return (
     <>
+      <nav className="navbar navbar-dark bg-dark">
+        {" "}
+        <NavBar />
+      </nav>
       <ul className="nav nav-tabs">
         <TabButton
           isActive={tab === "textbookSolutions"}

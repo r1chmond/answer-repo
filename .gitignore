@@ -440,6 +440,8 @@ $RECYCLE.BIN/
 # Portable Network Graphics
 *.png
 
+!ar_logo.png
+
 # Animated Portable Network Graphics
 *.apng
 

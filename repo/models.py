@@ -38,6 +38,7 @@ class Chapter(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     number = models.IntegerField()
+    #chapter can have status field to show if it has all solutions or not
     
     def __str__(self):
         return f'<{self.book.title}, {self.title}, {self.number}>'

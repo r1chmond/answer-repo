@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
@@ -42,12 +42,11 @@ function Book() {
   return (
     <ul className="list-group bg-dark">
       {books.map((book) => (
-        <Link className="anchor-link" to={`books/${book.id}`}>
+        <Link className="anchor-link" to={`books/${book.id}`} key={book.id}>
           <li
             id="book-list-row"
             className="list-group-item bg-dark text-light"
             style={{ marginTop: 8 }}
-            key={book.id}
           >
             <span className="cell">{book.title}</span>
             <span id="book-edition-cell" className="cell">

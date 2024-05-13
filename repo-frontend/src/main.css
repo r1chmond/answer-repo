@@ -29,8 +29,48 @@
     text-decoration: none;
 }
 
+.navbar {
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+#logo-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    
+}
+
+#logo-container img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+   
+}
+
+
+#logo-container:hover {
+    border: 1px solid rgb(43, 43, 43);
+}
+
 .nav-item:hover {
     cursor: pointer;
+}
+
+
+#bc-active-item {
+    color: rgb(98, 98, 98)
+}
+
+#bc-ol {
+    padding-top: 10px;
+}
+
+#bc-nav {
+    color: white;
+    font-size: var(--font-sml);
 }
 
 .custom-body {
@@ -39,6 +79,11 @@
   font-size: var(--font-med);
   background-color: var(--bg-color);
   height: 100vh;
+}
+
+#title-bar {
+    padding-left: 10px;
+    font-size: var(--font-lrg);
 }
 
 .container {
@@ -59,6 +104,7 @@
     margin-left: auto;
     margin-right: auto;
 }
+
 
 /* book listing styles*/
 #book-list-row {

@@ -1,17 +1,13 @@
+import { Link } from "react-router-dom";
+import ar_logo from "../assets/ar_logo.png";
+
 function NavBar() {
   return (
-    <ul className="nav nav-tabs">
-      <li className="nav-item">
-        <a className="nav-link active" aria-current="page" href="#">
-          Textbook Solutions
-        </a>
-      </li>
-      <li className="nav-item">
-        <a className="nav-link" href="#">
-          Blog Posts
-        </a>
-      </li>
-    </ul>
+    <div className="container-fluid">
+      <Link id="logo-container" className="navbar-brand" to="/">
+        <img id="logo" src={ar_logo} alt="logo" />
+      </Link>
+    </div>
   );
 }
 
