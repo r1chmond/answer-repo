@@ -1,5 +1,5 @@
 """
-WSGI config for answer_repo project.
+WSGI config for answer-repo project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'answer_repo.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'answer-repo.settings')
 
 application = get_wsgi_application()
