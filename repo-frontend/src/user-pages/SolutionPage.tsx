@@ -5,6 +5,7 @@ import axios from "axios";
 import NavBar from "../components/NavBar";
 import Chapter from "../interface/ChapterInterface";
 import ChapterBreadcrumb from "../components/ChapterBreadcrumb";
+import SideBar from "../components/SideBar";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
@@ -74,10 +75,6 @@ function SolutionPage() {
             </li>
             <div>
               {chapter.map((currentChapter) => (
-                // <Link to={`/books/${currentChapter.book}`}>
-                //   {" "}
-                //   {currentChapter.book}
-                // </Link>
                 <ChapterBreadcrumb
                   chapter={currentChapter}
                   key={currentChapter.id}
@@ -86,16 +83,9 @@ function SolutionPage() {
             </div>
           </ol>
         </nav>
-        <ul className="list-group bg-dark">
-          {solutions.map((solution) => (
-            <li
-              className="list-group-item bg-dark text-light"
-              key={solution.id}
-            >
-              {solution.exercise_number}
-            </li>
-          ))}
-        </ul>
+        <>
+          <SideBar solutions={solutions} />
+        </>
       </div>
     </>
   );

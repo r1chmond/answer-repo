@@ -8,7 +8,7 @@ import Chapter from "../interface/ChapterInterface";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
-function BookPage() {
+function ChapterPage() {
   let { bookId } = useParams();
 
   const [chapters, setChapters] = useState<Chapter[]>([]);
@@ -89,4 +89,4 @@ function BookPage() {
   );
 }
 
-export default BookPage;
+export default ChapterPage;
