@@ -6,6 +6,7 @@ import NavBar from "../components/NavBar";
 import Chapter from "../interface/ChapterInterface";
 import ChapterBreadcrumb from "../components/ChapterBreadcrumb";
 import SideBar from "../components/SideBar";
+import ScrollTopButton from "../components/ScrollTopButton";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
@@ -71,7 +72,7 @@ function SolutionPage() {
         <nav id="bc-nav" aria-label="breadcrumb">
           <ol id="bc-ol" className="breadcrumb">
             <li id="bc-books" className="breadcrumb-item">
-              <Link to={"/"}>Books</Link>
+              <Link to={"/"}>Books</Link> <span id="greater-than">&gt;</span>
             </li>
             <div>
               {chapter.map((currentChapter) => (
@@ -87,6 +88,9 @@ function SolutionPage() {
           <SideBar solutions={solutions} />
         </>
       </div>
+      <>
+        <ScrollTopButton />
+      </>
     </>
   );
 }

@@ -8,13 +8,16 @@ const SideBar: React.FC<SolutionProps> = ({ solutions }) => {
   const handleClick = () => {
     const sidebar = document.getElementById("mySidebar") as HTMLElement;
     const main = document.getElementById("main") as HTMLElement;
+    const openbtn = document.getElementById("open-close-btn") as HTMLElement;
 
     if (sidebar && main && sidebar.style.width === "0px") {
       sidebar.style.width = "250px";
       main.style.marginLeft = "250px";
+      openbtn.innerText = "Close Solutions";
     } else {
       sidebar.style.width = "0px";
       main.style.marginLeft = "0px";
+      openbtn.innerText = "Open Solutions";
     }
   };
 
@@ -28,7 +31,7 @@ const SideBar: React.FC<SolutionProps> = ({ solutions }) => {
         ))}
       </div>
       <div id="main">
-        <button className="openbtn" onClick={handleClick}>
+        <button id="open-close-btn" className="openbtn" onClick={handleClick}>
           &#9776; Open Solutions
         </button>
       </div>
