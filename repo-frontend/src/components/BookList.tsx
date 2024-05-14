@@ -1,18 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Book from "../interface/BookInterface";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
-interface Book {
-  id: number;
-  title: string;
-  author: string;
-  edition: number;
-  isbn: string;
-}
-
-function Book() {
+function BookList() {
   const [books, setBooks] = useState<Book[]>([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -43,11 +36,7 @@ function Book() {
     <ul className="list-group bg-dark">
       {books.map((book) => (
         <Link className="anchor-link" to={`books/${book.id}`} key={book.id}>
-          <li
-            id="book-list-row"
-            className="list-group-item bg-dark text-light"
-            style={{ marginTop: 8 }}
-          >
+          <li id="book-list-row" className="list-group-item bg-dark text-light">
             <span className="cell">{book.title}</span>
             <span id="book-edition-cell" className="cell">
               Edition: {book.edition}
@@ -60,4 +49,4 @@ function Book() {
   );
 }
 
-export default Book;
+export default BookList;

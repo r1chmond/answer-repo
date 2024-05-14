@@ -18,8 +18,11 @@ class ChapterView(viewsets.ModelViewSet):
     
     def get_queryset(self):
         book_id = self.request.query_params.get('book_id')
+        chapter_id = self.request.query_params.get('chapter_id')
         if book_id:
             return Chapter.objects.filter(book=book_id)
+        elif chapter_id:
+            return Chapter.objects.filter(id=chapter_id)
         else:
             return Chapter.objects.all()
         

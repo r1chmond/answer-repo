@@ -4,13 +4,9 @@ import { useState, useEffect } from "react";
 import ErrorPage from "./ErrorPage";
 import NavBar from "../components/NavBar";
 import Book from "../interface/BookInterface";
+import Chapter from "../interface/ChapterInterface";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
-
-interface Chapter {
-  id: number;
-  title: string;
-}
 
 function BookPage() {
   let { bookId } = useParams();
@@ -44,6 +40,7 @@ function BookPage() {
   }
 
   if (error) {
+    console.log(`Error occured ${error}`);
     return (
       <div className="bg-dark text-light">
         <ErrorPage />
@@ -69,27 +66,22 @@ function BookPage() {
             <li className="breadcrumb-item">
               <Link to={"/"}>Books</Link>
             </li>
-            {book.map((currentBook) => (
-              <li
-                id="bc-active-item"
-                className="breadcrumb-item active"
-                key={currentBook.id}
-              >
-                {currentBook.title}
-              </li>
-            ))}
           </ol>
         </nav>
         <ul className="list-group bg-dark">
           {chapters.map((chapter) => (
-            <li
-              id="book-list-row"
-              className="list-group-item bg-dark text-light"
-              style={{ marginTop: 8 }}
+            <Link
+              className="anchor-link"
+              to={`chapters/${chapter.id}`}
               key={chapter.id}
             >
-              {chapter.title}
-            </li>
+              <li
+                id="book-list-row"
+                className="list-group-item bg-dark text-light"
+              >
+                ({chapter.number}) {chapter.title}
+              </li>
+            </Link>
           ))}
         </ul>
       </div>

@@ -69,8 +69,11 @@
 }
 
 #bc-nav {
-    color: white;
     font-size: var(--font-sml);
+}
+
+#bc-books {
+    margin-right: 10px;
 }
 
 .custom-body {

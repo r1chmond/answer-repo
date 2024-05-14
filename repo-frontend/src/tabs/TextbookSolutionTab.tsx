@@ -1,6 +1,5 @@
 import SearchBar from "../components/SearchBar";
-import Book from "../components/Book";
-import NavBar from "../components/NavBar";
+import BookList from "../components/BookList";
 
 function TextbookSolutionTab() {
   return (
@@ -9,7 +8,7 @@ function TextbookSolutionTab() {
         <SearchBar />
       </div>
       <div id="list-container" className="container bg-dark">
-        <Book />
+        <BookList />
       </div>
       <div className="footer">copyright</div>
     </>
