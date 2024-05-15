@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Outlet } from "react-router-dom";
 import Solution from "../interface/SolutionInterface";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -87,6 +87,9 @@ function SolutionPage() {
         <>
           <SideBar solutions={solutions} />
         </>
+        <div id="detail">
+          <Outlet />
+        </div>
       </div>
       <>
         <ScrollTopButton />

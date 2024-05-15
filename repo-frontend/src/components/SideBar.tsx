@@ -1,4 +1,5 @@
 import Solution from "../interface/SolutionInterface";
+import { Link } from "react-router-dom";
 import React from "react";
 
 interface SolutionProps {
@@ -25,9 +26,9 @@ const SideBar: React.FC<SolutionProps> = ({ solutions }) => {
     <>
       <div id="mySidebar" className="sidebar" style={{ width: "0px" }}>
         {solutions.map((solution) => (
-          <a key={solution.id} href="#">
+          <Link key={solution.id} to={`solutions/${solution.id}`}>
             Exercise {solution.exercise_number}
-          </a>
+          </Link>
         ))}
       </div>
       <div id="main">

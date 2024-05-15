@@ -154,7 +154,17 @@
 .footer{
     font-size: var(--font-sml);
 }
-
+/*==================================================================================================*/
+/*Error Page*/
+#error-page{
+    position: relative;
+    top: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
 /*==================================================================================================*/
 /*Side bar*/
 
@@ -163,7 +173,6 @@ background-color: var(--dark-color);
   height: 90%;
   width: 0;
   position: absolute;
-  z-index: 1;
   top: auto;
   left: auto;
   overflow-x: hidden;

@@ -6,6 +6,7 @@ import ChapterPage from "./user-pages/ChapterPage";
 import SolutionPage from "./user-pages/SolutionPage";
 import "bootstrap/dist/css/bootstrap.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Answer from "./components/Answer";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,12 @@ const router = createBrowserRouter([
   {
     path: "books/:bookId/chapters/:chapterId",
     element: <SolutionPage />,
+    children: [
+      {
+        path: "solutions/:solutionId",
+        element: <Answer />,
+      },
+    ],
   },
 ]);
 
