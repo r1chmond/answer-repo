@@ -7,6 +7,8 @@ import SolutionPage from "./user-pages/SolutionPage";
 import "bootstrap/dist/css/bootstrap.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Answer from "./components/Answer";
+import { loader as solutionListLoader } from "./components/SolutionList";
+import { solutionLoader } from "./components/SolutionList";
 
 const router = createBrowserRouter([
   {
@@ -21,10 +23,12 @@ const router = createBrowserRouter([
   {
     path: "books/:bookId/chapters/:chapterId",
     element: <SolutionPage />,
+    loader: ({ params }) => solutionListLoader({ params }),
     children: [
       {
         path: "solutions/:solutionId",
         element: <Answer />,
+        loader: ({ params }) => solutionLoader({ params }),
       },
     ],
   },

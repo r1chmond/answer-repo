@@ -1,9 +1,32 @@
-import { useParams } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
+import Solution from "../interface/SolutionInterface";
 
 function Answer() {
-  const param = useParams<{ solutionId: string }>();
+  const solutions = useLoaderData() as Solution[];
 
-  return <h1> Answer {param.solutionId} </h1>;
+  return (
+    <>
+      <div id="answer-main-container">
+        {solutions.map((solution) => (
+          <div id="answer-container" key={solution.id}>
+            <h4>{solution.exercise_number}</h4>
+            <p>{solution.answer}</p>
+            <div id="answer-img-container">
+              {solution.image ? (
+                <img
+                  id="answer-img"
+                  src={`${solution.image}`}
+                  alt="Answer image"
+                />
+              ) : (
+                <span>======</span>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }
 
 export default Answer;

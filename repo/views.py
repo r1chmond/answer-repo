@@ -8,8 +8,11 @@ class SolutionView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         chapter_id = self.request.query_params.get('chapter_id')
+        solution_id = self.request.query_params.get('solution_id')
         if chapter_id:
             return Solution.objects.filter(chapter=chapter_id)
+        elif solution_id:
+            return Solution.objects.filter(id=solution_id)
         else:
             return Solution.objects.all()
 

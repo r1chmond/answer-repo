@@ -91,7 +91,7 @@
 }
 
 .container {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 #list-container {
@@ -109,6 +109,20 @@
     margin-right: auto;
 }
 
+/* solution container*/
+#answer-container {
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    gap: 20px;
+
+}
+
+#answer-img{
+    object-fit: contain;
+    width: 100%;
+    border-radius: 10px;
+ }
 
 /* book listing styles*/
 #book-list-row {

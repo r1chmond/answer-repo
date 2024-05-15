@@ -1,4 +1,4 @@
-import { useParams, Link, Outlet } from "react-router-dom";
+import { useParams, Link, Outlet, useLoaderData } from "react-router-dom";
 import Solution from "../interface/SolutionInterface";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -12,21 +12,18 @@ const BASE_URL = "http://127.0.0.1:8000/api";
 
 function SolutionPage() {
   let { chapterId } = useParams();
-  const [solutions, setSolutions] = useState<Solution[]>([]);
   const [chapter, setChapter] = useState<Chapter[]>([]);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const solutions = useLoaderData() as Solution[];
 
   useEffect(() => {
-    const fetchSolution = async () => {
+    const fetchChapter = async () => {
       setLoading(true);
       try {
-        const [solutionsResponse, chapterResponse] = await Promise.all([
-          axios.get(`${BASE_URL}/solutions/?chapter_id=${chapterId}`),
-          axios.get(`${BASE_URL}/chapters/?chapter_id=${chapterId}`),
-        ]);
-
-        setSolutions(solutionsResponse.data);
+        const chapterResponse = await axios.get(
+          `${BASE_URL}/chapters/?chapter_id=${chapterId}`
+        );
         setChapter(chapterResponse.data);
       } catch (err: any) {
         setError(err);
@@ -35,7 +32,7 @@ function SolutionPage() {
         setLoading(false);
       }
     };
-    fetchSolution();
+    fetchChapter();
   }, []);
 
   if (loading) {
