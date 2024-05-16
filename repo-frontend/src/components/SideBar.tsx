@@ -1,12 +1,12 @@
 import Solution from "../interface/SolutionInterface";
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 
 interface SolutionProps {
   solutions: Solution[];
 }
 const SideBar: React.FC<SolutionProps> = ({ solutions }) => {
-  const handleClick = () => {
+  const handleButtonClick = () => {
     const sidebar = document.getElementById("mySidebar") as HTMLElement;
     const main = document.getElementById("main") as HTMLElement;
     const openbtn = document.getElementById("open-close-btn") as HTMLElement;
@@ -22,17 +22,30 @@ const SideBar: React.FC<SolutionProps> = ({ solutions }) => {
     }
   };
 
+  let [selectedIndex, setSelectedIndex] = useState(0);
+
   return (
     <>
       <div id="mySidebar" className="sidebar" style={{ width: "0px" }}>
-        {solutions.map((solution) => (
-          <Link key={solution.id} to={`solutions/${solution.id}`}>
+        {solutions.map((solution, index) => (
+          <Link
+            className={selectedIndex === index ? "isActive" : ""}
+            key={solution.id}
+            to={`solutions/${solution.id}`}
+            onClick={() => {
+              setSelectedIndex(index);
+            }}
+          >
             Exercise {solution.exercise_number}
           </Link>
         ))}
       </div>
       <div id="main">
-        <button id="open-close-btn" className="openbtn" onClick={handleClick}>
+        <button
+          id="open-close-btn"
+          className="openbtn"
+          onClick={handleButtonClick}
+        >
           &#9776; Open Solutions
         </button>
       </div>

@@ -143,6 +143,12 @@
    text-align: center;
 }
 
+.isActive {
+    border: solid grey 1px;
+    background-color: var(--hov-color);
+    border-radius: 5px;
+    margin: 5px;
+}
 
 .cell {
     flex: 1;
