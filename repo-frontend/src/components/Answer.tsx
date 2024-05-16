@@ -1,5 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import Solution from "../interface/SolutionInterface";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function Answer() {
   const solutions = useLoaderData() as Solution[];
@@ -10,7 +12,11 @@ function Answer() {
         {solutions.map((solution) => (
           <div id="answer-container" key={solution.id}>
             <h4>{solution.exercise_number}</h4>
-            <p>{solution.answer}</p>
+            <ReactMarkdown
+              className="markdown"
+              children={solution.answer}
+              remarkPlugins={[remarkGfm]}
+            />
             <div id="answer-img-container">
               {solution.image ? (
                 <img
