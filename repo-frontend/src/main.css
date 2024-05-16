@@ -7,9 +7,9 @@
     --txt-color: white;
 
     /*font sizes*/
-    --font-sml: 12px;
-    --font-med: 14px;
-    --font-lrg: 18px;
+    --font-sml: 14px;
+    --font-med: 18px;
+    --font-lrg: 21px;
 }
 *,
 *::before,
@@ -36,9 +36,31 @@ th, td {
     border-bottom: 1px solid grey !important;
 }
 
-.markdown > tbody td {
-  text-align: center;
+.card{
+    width: 18rem;
+    min-height: 220px;
+    max-height: 240px;
+    cursor: pointer;
 }
+#cover-img{
+    min-height: 230px;
+    height: 230px;
+    object-fit: cover;
+}
+.bp-cover-title-container{
+    margin-top: 15px;
+    color: white;
+    padding: 3px;
+}
+#blogpost-container{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    row-gap: 10px;
+    column-gap: 10px;
+    padding: 10px;
+    justify-items: center;
+}
+
 
 .anchor-link {
     text-decoration: none;

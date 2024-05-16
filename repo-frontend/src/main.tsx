@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Answer from "./components/Answer";
 import { loader as solutionListLoader } from "./components/SolutionList";
 import { solutionLoader } from "./components/SolutionList";
+import BlogPostPage from "./user-pages/BlogPostPage";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         loader: ({ params }) => solutionLoader({ params }),
       },
     ],
+  },
+  {
+    path: "blogposts/:postId",
+    element: <BlogPostPage />,
   },
 ]);
 

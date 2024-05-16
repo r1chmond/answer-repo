@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from .serializers import *
 from .models import *
@@ -42,4 +41,11 @@ class BookView(viewsets.ModelViewSet):
 
 class BlogPostView(viewsets.ModelViewSet):
     serializer_class = BlogPostSerializer
-    queryset = BlogPost.objects.all()
+
+    def get_queryset(self):
+        post_id = self.request.query_params.get('post_id')
+        if post_id:
+            return BlogPost.objects.filter(id=post_id)
+        else:
+            return BlogPost.objects.all()
+        
