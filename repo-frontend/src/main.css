@@ -148,8 +148,15 @@
     background-color: var(--hov-color);
     border-radius: 5px;
     margin: 5px;
+    transition: 0.3s;
 }
-
+#prompt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    color: grey;
+}
 .cell {
     flex: 1;
     overflow: hidden;

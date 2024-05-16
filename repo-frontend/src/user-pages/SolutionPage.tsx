@@ -49,6 +49,17 @@ function SolutionPage() {
     );
   }
 
+  //If outlet div has child element, remove prompt(select solution)
+  const solutionDetail = document.getElementById("detail");
+  const solutionPrompt = document.getElementById("prompt");
+  if (
+    solutionDetail &&
+    solutionPrompt &&
+    solutionDetail.childElementCount > 0
+  ) {
+    solutionPrompt.innerText = "";
+  }
+
   return (
     <>
       <nav className="navbar navbar-dark bg-dark">
@@ -87,6 +98,7 @@ function SolutionPage() {
         <div id="detail">
           <Outlet />
         </div>
+        <div id="prompt">Select a solution</div>
       </div>
       <>
         <ScrollTopButton />

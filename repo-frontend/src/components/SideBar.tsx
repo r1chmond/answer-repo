@@ -22,7 +22,15 @@ const SideBar: React.FC<SolutionProps> = ({ solutions }) => {
     }
   };
 
-  let [selectedIndex, setSelectedIndex] = useState(0);
+  let [selectedIndex, setSelectedIndex] = useState(-1);
+
+  const handleItemClick = (index: number) => {
+    setSelectedIndex(index);
+    const solutionPrompt = document.getElementById("prompt");
+    if (solutionPrompt) {
+      solutionPrompt.innerText = "";
+    }
+  };
 
   return (
     <>
@@ -32,9 +40,7 @@ const SideBar: React.FC<SolutionProps> = ({ solutions }) => {
             className={selectedIndex === index ? "isActive" : ""}
             key={solution.id}
             to={`solutions/${solution.id}`}
-            onClick={() => {
-              setSelectedIndex(index);
-            }}
+            onClick={() => handleItemClick(index)}
           >
             Exercise {solution.exercise_number}
           </Link>
