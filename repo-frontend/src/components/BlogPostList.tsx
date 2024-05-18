@@ -1,6 +1,6 @@
 //TODO: add fetch errors and loading
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import BlogPost from "../interface/BlogPostInterface";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -9,28 +9,64 @@ const BASE_URL = "http://127.0.0.1:8000/api";
 
 function BlogPostList() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const postResponse = await axios.get(`${BASE_URL}/blogposts`);
-      setPosts(postResponse.data);
+      setLoading(true);
+      try {
+        const postResponse = await axios.get(`${BASE_URL}/blogposts`);
+        setPosts(postResponse.data);
+      } catch (err: any) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPosts();
   }, []);
+
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const filteredPosts = useMemo(() => {
+    return posts.filter((post) =>
+      post.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+    );
+  }, [posts, searchQuery]);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Something went wrong... Try again</div>;
+  }
+
   return (
     <>
-      {posts.map((post) => (
-        <Link
-          className="card grid-item"
-          key={post.id}
-          to={`blogposts/${post.id}`}
-        >
-          <img id="cover-img" src={post.cover_image} alt="cover image" />
-          <div className="bp-cover-title-container">
-            <p>{post.title}</p>
-          </div>
-        </Link>
-      ))}
+      <div className="search-container">
+        <div className="mb-3">
+          <input
+            className="form-control"
+            id="exampleFormControlInput1"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
+      <div id="blogpost-container" className="container bg-dark">
+        {filteredPosts.map((post) => (
+          <Link
+            className="card grid-item"
+            key={post.id}
+            to={`blogposts/${post.id}`}
+          >
+            <img id="cover-img" src={post.cover_image} alt="cover image" />
+            <div className="bp-cover-title-container">
+              <p>{post.title}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
     </>
   );
 }
