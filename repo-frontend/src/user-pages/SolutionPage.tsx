@@ -80,16 +80,18 @@ function SolutionPage() {
         <nav id="bc-nav" aria-label="breadcrumb">
           <ol id="bc-ol" className="breadcrumb">
             <li id="bc-books" className="breadcrumb-item">
-              <Link to={"/"}>Books</Link> <span id="greater-than">&gt;</span>
+              <Link className="inactive-anchor-link" to={"/"}>
+                Books
+              </Link>{" "}
+              <span className="greater-than">&#x02AA2;</span>
             </li>
-            <div>
-              {chapter.map((currentChapter) => (
-                <ChapterBreadcrumb
-                  chapter={currentChapter}
-                  key={currentChapter.id}
-                />
-              ))}
-            </div>
+
+            {chapter.map((currentChapter) => (
+              <ChapterBreadcrumb
+                chapter={currentChapter}
+                key={currentChapter.id}
+              />
+            ))}
           </ol>
         </nav>
         <>

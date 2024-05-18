@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import BlogPost from "../interface/BlogPostInterface";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import NavBar from "../components/NavBar";
@@ -12,6 +12,12 @@ const BASE_URL = "http://127.0.0.1:8000/api";
 function BlogPostPage() {
   const param = useParams();
   const [posts, setPosts] = useState<BlogPost[]>([]);
+
+  const navigate = useNavigate();
+
+  const goBackToHomePage = () => {
+    navigate("/", { state: { from: "blogpostPage" } });
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -28,10 +34,16 @@ function BlogPostPage() {
         <NavBar />
       </nav>
       <div className="container bg-dark">
-        <Link to="/">Back</Link>
+        <button
+          id="button-link"
+          className="inactive-anchor-link"
+          onClick={goBackToHomePage}
+        >
+          Back to blog posts
+        </button>
         {posts.map((post) => (
-          <div key={post.id}>
-            <h4>{post.title}</h4>
+          <div id="bp-detail-container" key={post.id}>
+            <h3>{post.title}</h3>
             <div>
               <div>{post.date_posted}</div>
               <div>{post.author}</div>

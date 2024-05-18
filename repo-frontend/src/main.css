@@ -5,6 +5,8 @@
     --dark-color: rgb(28, 33, 37);
     --hov-color: rgb(60, 60, 60);
     --txt-color: white;
+    --nav-color: rgb(177, 232, 232);
+    --nav-hov-color: rgb(125, 176, 176);
 
     /*font sizes*/
     --font-sml: 14px;
@@ -36,6 +38,7 @@ th, td {
     border-bottom: 1px solid grey !important;
 }
 
+
 .card{
     width: 18rem;
     min-height: 220px;
@@ -61,10 +64,23 @@ th, td {
     justify-items: center;
 }
 
+#bp-detail-container{
+    margin: 30px 15px 15px 15px;
+}
+
 
 .anchor-link {
     text-decoration: none;
 }
+.inactive-anchor-link {
+    text-decoration: none;
+    color: var(--nav-color);
+    transition: 0.3s;
+}
+.inactive-anchor-link:hover{
+    color: var(--nav-hov-color);
+}
+
 
 .navbar {
     margin-bottom: 15px;
@@ -96,6 +112,10 @@ th, td {
     cursor: pointer;
 }
 
+#bc-active{
+    padding-left: 0;
+    color: #818181;
+}
 
 #bc-ol {
     padding-top: 10px;
@@ -108,7 +128,18 @@ th, td {
 #bc-books {
     margin-right: 10px;
 }
-#greater-than {
+#bc-book-title{
+    padding-left: 0;
+    
+}
+#bc-book-title-link{
+margin-right: 10px;
+}
+#bc-book-title::before{
+    padding: 0;
+}
+
+.greater-than {
     color: #818181;
 }
 
@@ -178,6 +209,7 @@ th, td {
    text-align: center;
 }
 
+/*for sidebar listing*/
 .isActive {
     border: solid grey 1px;
     background-color: var(--hov-color);
@@ -199,6 +231,28 @@ th, td {
     text-align: left;
     padding: 0 10px;
 }
+/*==========================
+go back btn
+*/
+#button-link {
+    background: none;
+    border: none;
+    padding: 10px 0 0 0;
+    font: inherit;
+    cursor: pointer;
+    font-size: var(--font-sml);
+  }
+  
+#button-link:hover {
+    text-decoration: none; 
+  }
+  
+#button-link:focus {
+    outline: none; 
+    text-decoration: none; 
+   
+  }
+/*============================================================*/
 
 #scroll-top-btn{
     position: sticky;

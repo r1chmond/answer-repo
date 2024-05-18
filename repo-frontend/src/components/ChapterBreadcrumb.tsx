@@ -28,12 +28,22 @@ const ChapterBreadcrumb: React.FC<ChapterBreadcrumbProps> = ({ chapter }) => {
   }, [chapter.book]); // Run effect when chapter.book changes
 
   return (
-    <li className="breadcrumb-item">
-      <Link to={`/books/${chapter.book}`}>
-        {bookTitle ? bookTitle : `Book ${chapter.book}`}{" "}
-        {/* Show title or fallback */}
-      </Link>
-    </li>
+    <>
+      <li id="bc-book-title" className="breadcrumb-item">
+        <Link
+          className="inactive-anchor-link"
+          id="bc-book-title-link"
+          to={`/books/${chapter.book}`}
+        >
+          {bookTitle ? bookTitle : `Book ${chapter.book}`}
+        </Link>
+
+        <span className="greater-than">&#x02AA2;</span>
+      </li>
+      <li id="bc-active" className="breadcrumb-item active">
+        {chapter.title}
+      </li>
+    </>
   );
 };
 

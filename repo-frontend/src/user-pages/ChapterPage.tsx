@@ -64,8 +64,20 @@ function ChapterPage() {
         <nav id="bc-nav" aria-label="breadcrumb">
           <ol id="bc-ol" className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to={"/"}>Books</Link>
+              <Link className="inactive-anchor-link" to={"/"}>
+                Books
+              </Link>{" "}
+              <span className="greater-than">&#x02AA2;</span>
             </li>
+            {book.map((currentBook) => (
+              <li
+                id="bc-active"
+                className="breadcrumb-item active"
+                key={currentBook.id}
+              >
+                {currentBook.title}
+              </li>
+            ))}
           </ol>
         </nav>
         <ul className="list-group bg-dark">

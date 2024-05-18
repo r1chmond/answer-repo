@@ -4,10 +4,15 @@ import BlogPostTab from "../tabs/BlogPostTab";
 import NavBar from "../components/NavBar";
 import TextbookSolutionTab from "../tabs/TextbookSolutionTab";
 import "../main.css";
+import { useLocation } from "react-router-dom";
 
 function HomePage() {
+  const location = useLocation();
   const [isPending, startTransition] = useTransition();
-  const [tab, setTab] = useState<string>("textbookSolutions");
+  const [tab, setTab] = useState<string>(() => {
+    const prevLocation = location.state?.from as string;
+    return prevLocation === "blogpostPage" ? "blogpost" : "textbookSolutions";
+  });
 
   function selectTab(nextTab: string): void {
     startTransition(() => {
@@ -15,6 +20,9 @@ function HomePage() {
     });
   }
 
+  if (isPending) {
+    return <div> Pending </div>;
+  }
   return (
     <>
       <nav className="navbar navbar-dark bg-dark">

@@ -10,6 +10,7 @@ import Answer from "./components/Answer";
 import { loader as solutionListLoader } from "./components/SolutionList";
 import { solutionLoader } from "./components/SolutionList";
 import BlogPostPage from "./user-pages/BlogPostPage";
+import { NavigationProvider } from "./components/NavigationContext";
 
 const router = createBrowserRouter([
   {
@@ -39,8 +40,12 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const container = document.getElementById("root")!;
+const root = ReactDOM.createRoot(container);
+root.render(
   <React.StrictMode>
+    {/* <NavigationProvider> */}
     <RouterProvider router={router} />
+    {/* </NavigationProvider> */}
   </React.StrictMode>
 );
