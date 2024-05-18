@@ -46,7 +46,8 @@ const BookList: React.FC = () => {
         <div className="mb-3">
           <input
             className="form-control"
-            id="exampleFormControlInput1"
+            id="textbook-search"
+            name="textbook-search"
             placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

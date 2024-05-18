@@ -46,7 +46,8 @@ function BlogPostList() {
         <div className="mb-3">
           <input
             className="form-control"
-            id="exampleFormControlInput1"
+            id="post-search"
+            name="post-search"
             placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
