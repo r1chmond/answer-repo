@@ -7,8 +7,10 @@ import Chapter from "../interface/ChapterInterface";
 import ChapterBreadcrumb from "../components/ChapterBreadcrumb";
 import SideBar from "../components/SideBar";
 import ScrollTopButton from "../components/ScrollTopButton";
+import Loading from "../components/LoadingComponent";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
+const STATUS_OK = 200;
 
 function SolutionPage() {
   let { chapterId } = useParams();
@@ -24,10 +26,13 @@ function SolutionPage() {
         const chapterResponse = await axios.get(
           `${BASE_URL}/chapters/?chapter_id=${chapterId}`
         );
-        setChapter(chapterResponse.data);
+        if (chapterResponse.status !== STATUS_OK) {
+          throw new Error("Network error");
+        } else {
+          setChapter(chapterResponse.data);
+        }
       } catch (err: any) {
         setError(err);
-        console.log(`Error when fetching solutions ${err}`);
       } finally {
         setLoading(false);
       }
@@ -36,7 +41,11 @@ function SolutionPage() {
   }, []);
 
   if (loading) {
-    return <div className="bg-dark text-light"> loading ... </div>;
+    return (
+      <>
+        <Loading />
+      </>
+    );
   }
 
   if (error) {

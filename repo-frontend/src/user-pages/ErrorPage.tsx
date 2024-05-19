@@ -5,7 +5,7 @@ function ErrorPage() {
   console.error(error);
   return (
     <>
-      <div id="error-page">
+      <div className="error-page">
         <h1>Oops! &#128169;</h1>
         <p> Sorry, an unexpected error has occured. </p>
         <p>

@@ -2,12 +2,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import Book from "../interface/BookInterface";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Loading from "./LoadingComponent";
+import ErrorComponent from "./ErrorComponent";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
+type FetchError = Error | null;
+
 const BookList: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<FetchError>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -16,9 +20,12 @@ const BookList: React.FC = () => {
       try {
         const response = await axios.get(`${BASE_URL}/books`);
         setBooks(response.data);
-      } catch (err: any) {
-        setError(err);
-        console.log(`Error occured when fetching books: ${err}`);
+        // setError(null);
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(`Error occured while fetching books: ${err}`);
+          setError(err);
+        }
       } finally {
         setLoading(false);
       }
@@ -34,10 +41,18 @@ const BookList: React.FC = () => {
   }, [books, searchQuery]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <Loading />
+      </>
+    );
   }
   if (error) {
-    return <div>Something went wrong... Try again</div>;
+    return (
+      <>
+        <ErrorComponent message={error.message} />
+      </>
+    );
   }
 
   return (

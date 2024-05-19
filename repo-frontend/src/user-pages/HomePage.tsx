@@ -9,6 +9,8 @@ import { useLocation } from "react-router-dom";
 function HomePage() {
   const location = useLocation();
   const [isPending, startTransition] = useTransition();
+
+  //if previous path is blog, then show blogs tab
   const [tab, setTab] = useState<string>(() => {
     const prevLocation = location.state?.from as string;
     return prevLocation === "blogpostPage" ? "blogpost" : "textbookSolutions";
@@ -21,12 +23,13 @@ function HomePage() {
   }
 
   if (isPending) {
-    return <div> Pending </div>;
+    return (
+      <div className="d-flex justify-content-center">&#128336; Pending </div>
+    );
   }
   return (
     <>
       <nav className="navbar navbar-dark bg-dark">
-        {" "}
         <NavBar />
       </nav>
       <ul className="nav nav-tabs">

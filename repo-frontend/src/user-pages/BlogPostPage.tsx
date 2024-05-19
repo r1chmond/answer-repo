@@ -47,6 +47,10 @@ function BlogPostPage() {
             <div>
               <div>{post.date_posted}</div>
               <div>{post.author}</div>
+              <div>
+                <span>{post.connection_platform}</span>
+                <span>{post.connect_author}</span>
+              </div>
             </div>
             <img src={post.cover_image} />
             <ReactMarkdown

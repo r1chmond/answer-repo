@@ -4,12 +4,16 @@ import { useEffect, useMemo, useState } from "react";
 import BlogPost from "../interface/BlogPostInterface";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Loading from "./LoadingComponent";
+import ErrorComponent from "./ErrorComponent";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
+type FetchError = Error | null;
+
 function BlogPostList() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<FetchError>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -18,8 +22,13 @@ function BlogPostList() {
       try {
         const postResponse = await axios.get(`${BASE_URL}/blogposts`);
         setPosts(postResponse.data);
-      } catch (err: any) {
-        setError(err);
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(
+            `Error occured while fetching blog posts: ${err.message}`
+          );
+          setError(err);
+        }
       } finally {
         setLoading(false);
       }
@@ -34,10 +43,18 @@ function BlogPostList() {
     );
   }, [posts, searchQuery]);
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <Loading />
+      </>
+    );
   }
   if (error) {
-    return <div>Something went wrong... Try again</div>;
+    return (
+      <>
+        <ErrorComponent message={error.message} />
+      </>
+    );
   }
 
   return (

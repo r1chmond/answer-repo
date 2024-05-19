@@ -4,8 +4,6 @@ function TextbookSolutionTab() {
   return (
     <>
       <BookList />
-
-      <div className="footer">copyright</div>
     </>
   );
 }

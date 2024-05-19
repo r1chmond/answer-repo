@@ -11,7 +11,9 @@ function Answer() {
       <div id="answer-main-container">
         {solutions.map((solution) => (
           <div id="answer-container" key={solution.id}>
-            <h4>{solution.exercise_number}</h4>
+            <h4>
+              {solution.exercise_type} {solution.exercise_number}
+            </h4>
             <ReactMarkdown
               className="markdown"
               children={solution.answer}

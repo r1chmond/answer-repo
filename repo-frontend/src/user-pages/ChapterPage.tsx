@@ -5,6 +5,7 @@ import ErrorPage from "./ErrorPage";
 import NavBar from "../components/NavBar";
 import Book from "../interface/BookInterface";
 import Chapter from "../interface/ChapterInterface";
+import Loading from "../components/LoadingComponent";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
@@ -36,7 +37,11 @@ function ChapterPage() {
   }, [bookId]);
 
   if (loading) {
-    return <div className="bg-dark text-light"> loading ... </div>;
+    return (
+      <>
+        <Loading />
+      </>
+    );
   }
 
   if (error) {
