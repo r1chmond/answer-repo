@@ -1,11 +1,11 @@
 import BookList from "../components/BookList";
 
-function TextbookSolutionTab() {
+const TextbookSolutionTab = () => {
   return (
     <>
       <BookList />
     </>
   );
-}
+};
 
 export default TextbookSolutionTab;

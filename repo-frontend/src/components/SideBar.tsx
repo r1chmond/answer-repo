@@ -5,6 +5,7 @@ import React, { useState } from "react";
 interface SolutionProps {
   solutions: Solution[];
 }
+
 const SideBar: React.FC<SolutionProps> = ({ solutions }) => {
   const handleButtonClick = () => {
     const sidebar = document.getElementById("mySidebar") as HTMLElement;
@@ -42,7 +43,7 @@ const SideBar: React.FC<SolutionProps> = ({ solutions }) => {
             to={`solutions/${solution.id}`}
             onClick={() => handleItemClick(index)}
           >
-            Exercise {solution.exercise_number}
+            {solution.exercise_type} {solution.exercise_number}
           </Link>
         ))}
       </div>

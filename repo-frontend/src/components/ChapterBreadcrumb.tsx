@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Chapter from "../interface/ChapterInterface";
+import { fetchErrorMessage } from "../interface/FetchError";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
@@ -17,14 +18,14 @@ const ChapterBreadcrumb: React.FC<ChapterBreadcrumbProps> = ({ chapter }) => {
       try {
         const response = await axios.get(`${BASE_URL}/books/${chapter.book}`);
         setBookTitle(response.data.title);
-      } catch (error) {
-        console.error("Error fetching book title:", error);
+      } catch (err) {
+        console.error(
+          `${fetchErrorMessage(chapter.book.toString(), "book")}: ${err}`
+        );
       }
     };
 
     fetchBookTitle();
-
-    // Cleanup function if needed
   }, [chapter.book]); // Run effect when chapter.book changes
 
   return (

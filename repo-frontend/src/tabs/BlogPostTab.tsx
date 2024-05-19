@@ -1,11 +1,11 @@
 import BlogPostList from "../components/BlogPostList";
 
-function BlogPostTab() {
+const BlogPostTab = () => {
   return (
     <>
       <BlogPostList />
     </>
   );
-}
+};
 
 export default BlogPostTab;

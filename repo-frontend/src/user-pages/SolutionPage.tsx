@@ -8,15 +8,17 @@ import ChapterBreadcrumb from "../components/ChapterBreadcrumb";
 import SideBar from "../components/SideBar";
 import ScrollTopButton from "../components/ScrollTopButton";
 import Loading from "../components/LoadingComponent";
+import ErrorComponent from "../components/ErrorComponent";
+import FetchError, { fetchErrorMessage } from "../interface/FetchError";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 const STATUS_OK = 200;
 
-function SolutionPage() {
+const SolutionPage = () => {
   let { chapterId } = useParams();
   const [chapter, setChapter] = useState<Chapter[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<FetchError>(null);
   const solutions = useLoaderData() as Solution[];
 
   useEffect(() => {
@@ -31,8 +33,11 @@ function SolutionPage() {
         } else {
           setChapter(chapterResponse.data);
         }
-      } catch (err: any) {
-        setError(err);
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(`${fetchErrorMessage(chapterId, "chapter")}: ${err}`);
+          setError(err);
+        }
       } finally {
         setLoading(false);
       }
@@ -49,12 +54,10 @@ function SolutionPage() {
   }
 
   if (error) {
-    console.log(`Errrooorrr!! ${error}`);
     return (
-      <div className="bg-dark text-light">
-        {" "}
-        Something went wrong... Try again
-      </div>
+      <>
+        <ErrorComponent message={error.message} />
+      </>
     );
   }
 
@@ -116,6 +119,6 @@ function SolutionPage() {
       </>
     </>
   );
-}
+};
 
 export default SolutionPage;

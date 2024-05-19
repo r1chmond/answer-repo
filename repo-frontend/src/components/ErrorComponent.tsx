@@ -15,7 +15,7 @@ const ErrorComponent: React.FC<ErrorComponentProps> = ({ message }) => {
         <p>
           <i>{message}</i>
         </p>
-        <button className="btn bg-dark text-light" onClick={handleReload}>
+        <button className="btn error-page-btn" onClick={handleReload}>
           Retry
         </button>
       </div>

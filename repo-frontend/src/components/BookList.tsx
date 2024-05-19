@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Loading from "./LoadingComponent";
 import ErrorComponent from "./ErrorComponent";
+import { fetchErrorMessage } from "../interface/FetchError";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
@@ -23,7 +24,7 @@ const BookList: React.FC = () => {
         // setError(null);
       } catch (err) {
         if (err instanceof Error) {
-          console.error(`Error occured while fetching books: ${err}`);
+          console.error(`${fetchErrorMessage("", "books")}: ${err}`);
           setError(err);
         }
       } finally {

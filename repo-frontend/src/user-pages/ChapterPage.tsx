@@ -1,20 +1,22 @@
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import ErrorPage from "./ErrorPage";
 import NavBar from "../components/NavBar";
 import Book from "../interface/BookInterface";
 import Chapter from "../interface/ChapterInterface";
 import Loading from "../components/LoadingComponent";
+import ErrorComponent from "../components/ErrorComponent";
+import FetchError, { fetchErrorMessage } from "../interface/FetchError";
+import ScrollTopButton from "../components/ScrollTopButton";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
-function ChapterPage() {
+const ChapterPage = () => {
   let { bookId } = useParams();
 
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [book, setBook] = useState<Book[]>([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<FetchError>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,8 +29,16 @@ function ChapterPage() {
         ]);
         setChapters(solutionResponse.data);
         setBook(bookResponse.data);
-      } catch (err: any) {
-        setError(err);
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(
+            `${fetchErrorMessage(
+              bookId,
+              "chapters of book"
+            )} OR book ${bookId}: ${err}`
+          );
+          setError(err);
+        }
       } finally {
         setLoading(false);
       }
@@ -45,11 +55,10 @@ function ChapterPage() {
   }
 
   if (error) {
-    console.log(`Error occured ${error}`);
     return (
-      <div className="bg-dark text-light">
-        <ErrorPage />
-      </div>
+      <>
+        <ErrorComponent message={error.message} />
+      </>
     );
   }
 
@@ -102,8 +111,9 @@ function ChapterPage() {
           ))}
         </ul>
       </div>
+      <ScrollTopButton />
     </>
   );
-}
+};
 
 export default ChapterPage;

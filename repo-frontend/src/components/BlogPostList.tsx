@@ -6,12 +6,11 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Loading from "./LoadingComponent";
 import ErrorComponent from "./ErrorComponent";
+import FetchError, { fetchErrorMessage } from "../interface/FetchError";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
-type FetchError = Error | null;
-
-function BlogPostList() {
+const BlogPostList = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [error, setError] = useState<FetchError>(null);
   const [loading, setLoading] = useState(false);
@@ -24,9 +23,7 @@ function BlogPostList() {
         setPosts(postResponse.data);
       } catch (err) {
         if (err instanceof Error) {
-          console.error(
-            `Error occured while fetching blog posts: ${err.message}`
-          );
+          console.error(`${fetchErrorMessage("", "blog posts")}: ${err}`);
           setError(err);
         }
       } finally {
@@ -87,6 +84,6 @@ function BlogPostList() {
       </div>
     </>
   );
-}
+};
 
 export default BlogPostList;

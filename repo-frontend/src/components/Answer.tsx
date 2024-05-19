@@ -3,7 +3,7 @@ import Solution from "../interface/SolutionInterface";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-function Answer() {
+const Answer = () => {
   const solutions = useLoaderData() as Solution[];
 
   return (
@@ -35,6 +35,6 @@ function Answer() {
       </div>
     </>
   );
-}
+};
 
 export default Answer;

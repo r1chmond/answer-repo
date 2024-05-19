@@ -5,8 +5,9 @@ import NavBar from "../components/NavBar";
 import TextbookSolutionTab from "../tabs/TextbookSolutionTab";
 import "../main.css";
 import { useLocation } from "react-router-dom";
+import ScrollTopButton from "../components/ScrollTopButton";
 
-function HomePage() {
+const HomePage = () => {
   const location = useLocation();
   const [isPending, startTransition] = useTransition();
 
@@ -16,11 +17,11 @@ function HomePage() {
     return prevLocation === "blogpostPage" ? "blogpost" : "textbookSolutions";
   });
 
-  function selectTab(nextTab: string): void {
+  const selectTab = (nextTab: string): void => {
     startTransition(() => {
       setTab(nextTab);
     });
-  }
+  };
 
   if (isPending) {
     return (
@@ -49,8 +50,10 @@ function HomePage() {
 
       {tab === "textbookSolutions" && <TextbookSolutionTab />}
       {tab === "blogpost" && <BlogPostTab />}
+
+      <ScrollTopButton />
     </>
   );
-}
+};
 
 export default HomePage;

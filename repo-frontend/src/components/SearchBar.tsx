@@ -1,4 +1,4 @@
-function SearchBar() {
+const SearchBar = () => {
   return (
     <>
       <div className="mb-3">
@@ -10,6 +10,6 @@ function SearchBar() {
       </div>
     </>
   );
-}
+};
 
 export default SearchBar;

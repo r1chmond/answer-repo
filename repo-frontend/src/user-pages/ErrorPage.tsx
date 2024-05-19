@@ -1,6 +1,6 @@
 import { Link, useRouteError } from "react-router-dom";
 
-function ErrorPage() {
+const ErrorPage = () => {
   const error: any = useRouteError();
   console.error(error);
   return (
@@ -11,12 +11,12 @@ function ErrorPage() {
         <p>
           <i>{error.statusText || error.message}</i>
         </p>
-        <Link className="btn bg-dark text-light" to="/">
+        <Link className="btn error-page-btn" to="/">
           Home
         </Link>
       </div>
     </>
   );
-}
+};
 
 export default ErrorPage;
