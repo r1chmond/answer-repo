@@ -103,9 +103,21 @@ const ChapterPage = () => {
             >
               <li
                 id="book-list-row"
-                className="list-group-item bg-dark text-light"
+                className="list-group-item bg-dark text-light d-flex justify-content-between"
               >
-                ({chapter.number}) {chapter.title}
+                <span>
+                  ({chapter.number}) {chapter.title}
+                </span>
+                {chapter.completion_status === "Pending" ||
+                chapter.completion_status === "Under Review" ? (
+                  <span className="completion-status">
+                    &#9203; {chapter.completion_status}
+                  </span>
+                ) : (
+                  <span className="completion-status">
+                    &#9989; {chapter.completion_status}
+                  </span>
+                )}
               </li>
             </Link>
           ))}

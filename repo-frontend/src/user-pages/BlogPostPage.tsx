@@ -81,10 +81,8 @@ const BlogPostPage = () => {
             />
           </div>
         ))}
-      </div>
-      <>
         <ScrollTopButton />
-      </>
+      </div>
     </>
   );
 };

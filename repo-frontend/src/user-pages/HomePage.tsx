@@ -50,7 +50,6 @@ const HomePage = () => {
 
       {tab === "textbookSolutions" && <TextbookSolutionTab />}
       {tab === "blogpost" && <BlogPostTab />}
-
       <ScrollTopButton />
     </>
   );
