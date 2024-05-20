@@ -1,8 +1,42 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
-class AdminUser(models.Model):
-    pass
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('Email field must be set')
+        
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_admin', True)
+        extra_fields.setdefault('is_owner', True)
+        return self.create_user(email, password, **extra_fields)
+        
+        
+
+    
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    is_owner = models.BooleanField(default=False, )
+    
+    objects = UserManager()
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    
+    def __str__(self):
+        return f'<{self.email}>'
 
 
 class BlogPost(models.Model):
@@ -22,7 +56,7 @@ class BlogPost(models.Model):
         LINKEDIN = 'LinkedIn'
         
     category = models.CharField(max_length=30, choices=PostCategory, default=PostCategory.TUTORIALS) 
-    author = models.CharField(max_length=100)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     connection_platform = models.CharField(max_length=12, choices=Platform, default=Platform.EMAIL)
     connect_author = models.CharField(max_length=50)
     title = models.CharField(max_length=200)
@@ -43,6 +77,7 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     edition = models.IntegerField(default=1)
     isbn = models.CharField(max_length=50, blank=True)
+    added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'<{self.title}, {self.author}>'
@@ -58,6 +93,7 @@ class Chapter(models.Model):
     title = models.CharField(max_length=200)
     number = models.IntegerField()
     completion_status = models.CharField(max_length=15, choices=CompletionStatus, default=CompletionStatus.PENDING)
+    added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
      
     def __str__(self):
         return f'<{self.book.title}, {self.title}, {self.number}>'
@@ -72,7 +108,9 @@ class Solution(models.Model):
     exercise_number = models.CharField(max_length=5)
     answer = models.TextField()
     image = models.ImageField(upload_to='solution-images', blank=True)
-
+    added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    
+    
     def __str__(self):
         return f'<{self.chapter.title},{self.exercise_number}>' 
 

@@ -1,5 +1,12 @@
+from typing import Any
 from django.contrib import admin
+from django.http.request import HttpRequest
 from .models import *
+
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('email',)
+    
+  
 
 class BlogPostAdmin(admin.ModelAdmin):
     list_display = ('category','author','title', 'content')
@@ -12,7 +19,8 @@ class ChapterAdmin(admin.ModelAdmin):
 
 class SolutionAdmin(admin.ModelAdmin):
     list_display = ('chapter', 'exercise_number', 'answer')
-
+    
+admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Book, BookAdmin)
 admin.site.register(Chapter, ChapterAdmin)
