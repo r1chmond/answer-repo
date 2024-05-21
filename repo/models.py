@@ -61,7 +61,7 @@ class BlogPost(models.Model):
     connect_author = models.CharField(max_length=50)
     title = models.CharField(max_length=200)
     content = models.TextField()
-    cover_image = models.ImageField(upload_to='blogpost-images', blank=True)
+    # cover_image = models.ImageField(upload_to='blogpost-images', blank=True)
     date_posted = models.DateField(auto_now_add=True)
     time_posted = models.TimeField(auto_now_add=True)
     
@@ -71,6 +71,10 @@ class BlogPost(models.Model):
     def __str__(self):
         return f'<{self.title}, {self.category}>'
 
+
+class BlogPostImage(models.Model):
+    blogpost = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=f'{blogpost.name}')
 
 class Book(models.Model):
     title = models.CharField(max_length=200)
@@ -107,7 +111,7 @@ class Solution(models.Model):
     exercise_type = models.CharField(max_length=20, choices=ExerciseType, default= ExerciseType.Exercise)
     exercise_number = models.CharField(max_length=5)
     answer = models.TextField()
-    image = models.ImageField(upload_to='solution-images', blank=True)
+    # image = models.ImageField(upload_to='solution-images', blank=True)
     added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     
     
@@ -115,3 +119,6 @@ class Solution(models.Model):
         return f'<{self.chapter.title},{self.exercise_number}>' 
 
 
+class SolutionImage(models.Model):
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=f'{solution.name}')
