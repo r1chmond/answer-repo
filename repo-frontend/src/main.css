@@ -297,7 +297,28 @@ go back btn
 
 .footer{
     font-size: var(--font-sml);
+
 }
+/*==================================================================================================*/
+/*Admin Pages*/
+form {
+    display: table;
+    border-spacing: 4px;
+}
+
+.form-fields-container {
+    display: table-row;
+    
+}
+
+.lbl-display {
+    display: table-cell;
+}
+
+.inp-display {
+    display: table-cell;
+}
+
 /*==================================================================================================*/
 /*Error Page*/
 .error-page{

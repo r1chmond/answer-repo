@@ -6,7 +6,7 @@ interface BlogPost {
   connect_author: string;
   title: string;
   content: string;
-  cover_image: string;
+  images: File[];
   date_posted: string;
   time_posted: string;
 }

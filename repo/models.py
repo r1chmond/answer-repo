@@ -25,6 +25,7 @@ class UserManager(BaseUserManager):
     
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
+    # needs_password_change = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -42,10 +43,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 class BlogPost(models.Model):
 
     class PostCategory(models.TextChoices):
-        TUTORIALS = 'Tutorials'
+        TUTORIAL = 'Tutorial'
         NEWS_AND_UPDATES = 'News and Updates'
         TIPS_AND_TRICKS = 'Tips and Tricks'
-        OTHERS = 'Others'
+        OTHER = 'Other'
     
     class Platform(models.TextChoices):
         WEBSITE = 'Website'
@@ -54,8 +55,9 @@ class BlogPost(models.Model):
         INSTAGRAM = 'Instagram'
         GITHUB = 'Github'
         LINKEDIN = 'LinkedIn'
+        OTHER = 'Other'
         
-    category = models.CharField(max_length=30, choices=PostCategory, default=PostCategory.TUTORIALS) 
+    category = models.CharField(max_length=30, choices=PostCategory, default=PostCategory.TUTORIAL) 
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     connection_platform = models.CharField(max_length=12, choices=Platform, default=Platform.EMAIL)
     connect_author = models.CharField(max_length=50)
@@ -73,9 +75,12 @@ class BlogPost(models.Model):
 
 
 class BlogPostImage(models.Model):
-    blogpost = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=f'{blogpost.name}')
+    blogpost = models.ForeignKey(BlogPost, related_name='images',on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=f'blogpost-images/')
 
+    def __str__(self,):
+        return self.image.name
+    
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
@@ -121,4 +126,4 @@ class Solution(models.Model):
 
 class SolutionImage(models.Model):
     solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=f'{solution.name}')
+    image = models.ImageField(upload_to='solution-images/')

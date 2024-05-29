@@ -25,11 +25,14 @@ router = DefaultRouter()
 router.register(r'solutions', views.SolutionView, 'solution')
 router.register(r'books', views.BookView, 'book')
 router.register(r'chapters', views.ChapterView, 'chapter')
-router.register(r'blogposts', views.BlogPostView, 'blog')
+router.register(r'blogposts', views.BlogPostView, 'blogpost')
+# router.register(r'users', views.UserView, 'user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('auth/', include('dj_rest_auth.urls')), 
+    path('logout/', views.logout, name='logout'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

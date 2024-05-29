@@ -10,6 +10,9 @@ import Answer from "./components/Answer";
 import { loader as solutionListLoader } from "./components/SolutionList";
 import { solutionLoader } from "./components/SolutionList";
 import BlogPostPage from "./user-pages/BlogPostPage";
+import BlogPostForm from "./admin-page/BlogPostForm";
+import AdminLogin from "./admin-page/AdminLogin";
+import AdminFeed from "./admin-page/AdminFeed";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +39,18 @@ const router = createBrowserRouter([
   {
     path: "blogposts/:postId",
     element: <BlogPostPage />,
+  },
+  {
+    path: "answer-repo/admin/blogposts/create",
+    element: <BlogPostForm />,
+  },
+  {
+    path: "answer-repo/admin/login",
+    element: <AdminLogin />,
+  },
+  {
+    path: "answer-repo/admin/feed",
+    element: <AdminFeed />,
   },
 ]);
 
