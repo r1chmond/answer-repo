@@ -1,62 +1,60 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import api from "../services/api";
+// AuthContext.tsx
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import axios from "axios";
 
-interface AuthContextData {
-  signed: boolean;
-  user: User | null;
-  signIn(email: string, password: string): Promise<void>;
-  signOut(): void;
-}
-
-interface User {
-  email: string;
-  is_admin: boolean;
-  is_staff: boolean;
-  is_owner: boolean;
+interface AuthContextProps {
+  user: any;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
-
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      api.defaults.headers.Authorization = `Token ${storedToken}`;
-    }
+    // Fetch the current user if already authenticated
+    axios
+      .get("/api/current_user/")
+      .then((response) => setUser(response.data))
+      .catch(() => setUser(null));
   }, []);
-  async function signIn(email: string, password: string) {
-    const response = await api.post("/rest-auth/login", { email, password });
-    const userData = await api.get("/rest-auth/user");
-    setUser(userData.data);
-    localStorage.setItem("user", JSON.stringify(userData.data));
-    localStorage.setItem("token", response.data.key);
-    api.defaults.headers.Authorization = `Token ${response.data.key}`;
-  }
 
-  function signOut() {
+  const login = async (email: string, password: string) => {
+    const response = await axios.post("/answer-repo/admin/login/", {
+      email,
+      password,
+    });
+    setUser(response.data.user);
+  };
+
+  const logout = async () => {
+    await axios.post("/answer-repo/admin/logout/");
     setUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    api.defaults.headers.Authorization = null;
-  }
+  };
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  return context;
-}

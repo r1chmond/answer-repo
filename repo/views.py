@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, status
 # from rest_framework.permissions import BasePermission,SAFE_METHODS
 from rest_framework.views import APIView
-from rest_framework.decorators import action
+from rest_framework.decorators import api_view
 from django.contrib.auth import login, logout
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
@@ -49,17 +49,6 @@ class BookView(viewsets.ModelViewSet):
         else:
             return Book.objects.all()
 
-# class BlogPostView(viewsets.GenericViewSet):
-#     serializer_class = BlogPostSerializer
-#     queryset = BlogPost.objects.all()
-    
-#     def post(self, request):
-#         serializer = BlogPostSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-#         return Response(serializer.errors, status=400)
 
 class BlogPostAdminUserWritePermission(permissions.BasePermission):
     
@@ -87,6 +76,7 @@ class BlogPostView(viewsets.ModelViewSet):
         if self.request.method in permissions.SAFE_METHODS:
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated(), BlogPostAdminUserWritePermission()]
+
 # class UserLogin(APIView):
 #     permission_classes = (permissions.AllowAny,)
 #     authentication_classes = (SessionAuthentication,)
@@ -101,11 +91,23 @@ class BlogPostView(viewsets.ModelViewSet):
 #             return Response(serializer.data, status=status.HTTP_200_OK)
         
 
-# class UserLogout(APIView):
-#     def post(self, request):
-#         logout(request)
-#         return Response(status=status.HTTP_200_OK)
+class UserLogout(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     
+    @api_view(['POST'])
+    def post(self, request):
+        user = request.user
+        logout(request)
+        print(f'user {user.email} has logged out =============')
+        return Response(status=status.HTTP_200_OK)
+    
+
+class HomeView(APIView):
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    
+    def get(self, request):
+        
+        return Response({'message': 'This is a protected feed.'})
 
 # class UserView(viewsets.ModelViewSet):
 #     permission_classes = [permissions.IsAuthenticated]
@@ -120,6 +122,6 @@ class BlogPostView(viewsets.ModelViewSet):
 #         return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
 
-def logout(request):
-    logout(request)
-    return JsonResponse({'detail': 'logged out'}, status=200)
+# def logout(request):
+#     logout(request)
+#     return JsonResponse({'detail': 'logged out'}, status=200)
