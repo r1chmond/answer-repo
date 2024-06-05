@@ -41,10 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-   'rest_framework.authtoken', 
+    'rest_framework_simplejwt.token_blacklist',
+    'rest_framework.authtoken',
     'repo',
-    # 'django.contrib.sites',
-    'dj_rest_auth',
 ]
 
 MIDDLEWARE = [
@@ -143,7 +142,15 @@ CORS_ALLOWED_ORIGINS = [
         'http://localhost:5173',
 ]
 
-CORS_ALLOWED_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'authorization',
+    'x-csrftoken',
+    'content-type',
+    
+]
 
 AUTH_USER_MODEL = 'repo.CustomUser'
 

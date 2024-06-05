@@ -19,10 +19,11 @@ const getCookie = (name: string): string | null => {
 };
 
 const logout = async (): Promise<void> => {
+  const refreshToken = localStorage.getItem("refresh_token");
   try {
     await axios.post(
-      "http://127.0.0.1:8000/auth/logout/",
-      {},
+      "http://127.0.0.1:8000/logout/blacklist/",
+      { refresh_token: refreshToken },
       {
         withCredentials: true,
         headers: {

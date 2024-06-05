@@ -3,7 +3,8 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from django.contrib.auth import login, logout
-from rest_framework.authentication import SessionAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
@@ -101,6 +102,22 @@ class UserLogout(APIView):
         print(f'user {user.email} has logged out =============')
         return Response(status=status.HTTP_200_OK)
     
+class BlacklistTokenUpdateView(APIView):
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = ()
+    
+    def post(self, request):
+        try:
+            refresh_token = request.data['refresh_token']
+            if not refresh_token:
+                return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
 
 class HomeView(APIView):
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
@@ -109,17 +126,17 @@ class HomeView(APIView):
         
         return Response({'message': 'This is a protected feed.'})
 
-# class UserView(viewsets.ModelViewSet):
-#     permission_classes = [permissions.IsAuthenticated]
-#     authentication_classes = [SessionAuthentication]
-#     serializer_class = UserSerializer
+class CustomUserView(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    serializer_class = CustomUserSerializer
     
-#     def get_queryset(self):
-#         return User.objects.filter(id=self.request.user.id)
-#     def retrieve(self, request, pk=None):
-#         user = self.get_object()
-#         serializer = self.get_serializer(user) 
-#         return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)
+    def retrieve(self, request, pk=None):
+        user = self.get_object()
+        serializer = self.get_serializer(user) 
+        return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
 
 # def logout(request):

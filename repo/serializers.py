@@ -43,33 +43,33 @@ class SolutionSerializer(serializers.ModelSerializer):
         model = Solution
         fields = '__all__' 
 
-# class UserSerializer(serializers.ModelSerializer):
-#     model = User
-#     fields = '__all__'
+class CustomUserSerializer(serializers.ModelSerializer):
+    model = User
+    fields = '__all__'
 
-class CustomUserLoginSerializer(LoginSerializer):
-    username = None
-    email = serializers.EmailField(required=True, allow_blank=False)
+# class CustomUserLoginSerializer(LoginSerializer):
+#     username = None
+#     email = serializers.EmailField(required=True, allow_blank=False)
     
-    def get_auth_user(self, email, password):
-        logger.debug(f'=============getting user auth {email}')
-        user = authenticate(request=self.context.get('request'), email=email, password=password)
+#     def get_auth_user(self, email, password):
+#         logger.debug(f'=============getting user auth {email}')
+#         user = authenticate(request=self.context.get('request'), email=email, password=password)
         
-        if not user:
-            raise serializers.ValidationError('Invalid email or password')
-        return user 
+#         if not user:
+#             raise serializers.ValidationError('Invalid email or password')
+#         return user 
     
-    def validate(self, attrs):
-        logger.debug(f'================Validating... {attrs.get('email')}')
-        email = attrs.get('email')
-        password = attrs.get('password')
+#     def validate(self, attrs):
+#         logger.debug(f'================Validating... {attrs.get('email')}')
+#         email = attrs.get('email')
+#         password = attrs.get('password')
 
-        user = self.get_auth_user(email, password)
-        if not user:
-            raise serializers.ValidationError('Invalid email or password')
+#         user = self.get_auth_user(email, password)
+#         if not user:
+#             raise serializers.ValidationError('Invalid email or password')
         
-        attrs['user'] = user
-        return attrs
+#         attrs['user'] = user
+#         return attrs
 
 
 

@@ -74,7 +74,7 @@ const BlogPostPage = () => {
                 <span>{post.connect_author}</span>
               </div>
             </div>
-            <img src={post.images[0]} />
+            <img src={post.images[0].name} />
             <ReactMarkdown
               children={post.content}
               remarkPlugins={[remarkGfm]}

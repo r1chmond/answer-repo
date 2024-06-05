@@ -27,13 +27,13 @@ router.register(r'solutions', views.SolutionView, 'solution')
 router.register(r'books', views.BookView, 'book')
 router.register(r'chapters', views.ChapterView, 'chapter')
 router.register(r'blogposts', views.BlogPostView, 'blogpost')
+router.register(r'users', views.CustomUserView, 'user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('auth/', include('dj_rest_auth.urls')), 
     path('auth/feed/', views.HomeView.as_view(), name='home-view'),
-    path('auth/logout/', views.UserLogout.as_view(), name='user-logout'),
+    path('logout/blacklist/', views.BlacklistTokenUpdateView.as_view(), name='blacklist'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
