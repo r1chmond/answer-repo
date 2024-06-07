@@ -32,7 +32,6 @@ router.register(r'users', views.CustomUserView, 'user')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('auth/feed/', views.HomeView.as_view(), name='home-view'),
     path('logout/blacklist/', views.BlacklistTokenUpdateView.as_view(), name='blacklist'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

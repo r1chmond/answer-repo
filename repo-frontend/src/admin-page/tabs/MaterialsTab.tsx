@@ -1,9 +1,9 @@
-import Materials from "../components/Materials";
+import SiteMaterials from "../components/SiteMaterials";
 
 const MaterialsTab: React.FC = () => {
   return (
     <>
-      <Materials />
+      <SiteMaterials />
     </>
   );
 };

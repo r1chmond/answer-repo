@@ -51,7 +51,7 @@ const router = createBrowserRouter([
     element: <AdminLoginPage />,
   },
   {
-    path: "answer-repo/admin/feed",
+    path: "answer-repo/admin/dashboard",
     element: (
       <ProtectedRoute>
         <AdminHomePage />

@@ -49,7 +49,7 @@ const AdminLogin: React.FC = () => {
         axiosInstance.defaults.headers[
           "Authorization"
         ] = `JWT ${localStorage.getItem("access_token")}`;
-        navigate("/answer-repo/admin/feed/");
+        navigate("/answer-repo/admin/dashboard");
       })
       .catch((error) => {
         console.error(error);

@@ -16,13 +16,13 @@ const AdminNavBar: React.FC = () => {
       <Link
         id="logo-container"
         className="navbar-brand"
-        to="/answer-repo/admin/feed/"
+        to="/answer-repo/admin/dashboard/"
       >
         <img id="logo" src={ar_logo} alt="logo" />
       </Link>
       <ul className="navbar-nav me-auto mb-2">
         <li className="text-light ">
-          <Link id="home-label" to={`/answer-repo/admin/feed/`}>
+          <Link id="home-label" to={`/answer-repo/admin/dashboard/`}>
             Answer Repo
           </Link>
         </li>

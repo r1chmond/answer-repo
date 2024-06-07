@@ -2,9 +2,9 @@ import { useLocation } from "react-router-dom";
 import TabButton from "../tabs/TabButton";
 import AdminNavBar from "./components/AdminNavBar";
 import { useState, useTransition } from "react";
-import FeedTab from "./tabs/FeedTab";
 import MaterialsTab from "./tabs/MaterialsTab";
 import ScrollTopButton from "../components/ScrollTopButton";
+import DashboardTab from "./tabs/DashboardTab";
 
 const AdminHomePage = () => {
   const location = useLocation();
@@ -12,7 +12,7 @@ const AdminHomePage = () => {
 
   const [tab, setTab] = useState<string>(() => {
     const prevLocation = location.state?.from as string;
-    return prevLocation === "materials" ? "materials" : "feed";
+    return prevLocation === "materials" ? "materials" : "dashboard";
   });
 
   const selectTab = (nextTab: string): void => {
@@ -33,18 +33,21 @@ const AdminHomePage = () => {
         <AdminNavBar />
       </nav>
       <ul className="nav nav-tabs">
-        <TabButton isActive={tab === "feed"} onClick={() => selectTab("feed")}>
-          Feed
+        <TabButton
+          isActive={tab === "dashboard"}
+          onClick={() => selectTab("dashboard")}
+        >
+          Dashboard
         </TabButton>
         <TabButton
           isActive={tab === "materials"}
           onClick={() => selectTab("materials")}
         >
-          Materials
+          Site Materials
         </TabButton>
       </ul>
 
-      {tab === "feed" && <FeedTab />}
+      {tab === "dashboard" && <DashboardTab />}
       {tab === "materails" && <MaterialsTab />}
       <ScrollTopButton />
     </>

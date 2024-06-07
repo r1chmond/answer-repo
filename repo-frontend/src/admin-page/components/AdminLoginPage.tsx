@@ -1,9 +1,4 @@
-import {
-  useActionData,
-  useLocation,
-  useNavigation,
-  useNavigate,
-} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import { useAuth } from "../AuthContext";
 import { useState } from "react";
@@ -14,7 +9,7 @@ const AdminLoginPage = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   let location = useLocation();
   let params = new URLSearchParams(location.search);
-  let from = params.get("from") || "/answer-repo/admin/feed";
+  let from = params.get("from") || "/answer-repo/admin/dashboard";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,12 +17,16 @@ const AdminLoginPage = () => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
+    setIsLoggingIn(true);
     try {
       await login(email, password);
       navigate(from, { replace: true });
     } catch (error) {
       console.error("Failed to login:", error);
       setError("Invalid login attempt");
+      setIsLoggingIn(false);
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -80,39 +79,5 @@ const AdminLoginPage = () => {
     </>
   );
 };
-
-// export const loginAction = async ({ request }: LoaderFunctionArgs) => {
-//   let formData = await request.formData();
-//   let email = formData.get("email") as string | null;
-//   let password = formData.get("password") as string | null;
-
-//   if (!email || !password) {
-//     return {
-//       error: "You must provide all credentials",
-//     };
-//   }
-
-//   try {
-//     await AuthProvider.;
-//   } catch (error) {
-//     // Unused as of now but this is how you would handle invalid
-//     // username/password combinations - just like validating the inputs
-//     // above
-//     return {
-//       error: "Invalid login attempt",
-//     };
-//   }
-//   let redirectTo = formData.get("redirectTo") || "answer-repo/admin/feed";
-//   console.log(redirectTo);
-
-//   return redirect(redirectTo as string);
-// };
-
-// export const loginLoader = async () => {
-//   if (AuthProvider.isAuthenticated) {
-//     return redirect("/answer-repo/admin/feed");
-//   }
-//   return null;
-// };
 
 export default AdminLoginPage;
