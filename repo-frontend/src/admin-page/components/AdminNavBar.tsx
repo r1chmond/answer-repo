@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
 import ar_logo from "../../assets/ar_logo.png";
-import Logout from "../Logout";
+import { useAuth } from "../AuthContext";
 
 const AdminNavBar: React.FC = () => {
+  const { logout } = useAuth();
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Failed to logout: ", error);
+    }
+  };
   return (
     <div className="container-fluid">
       <Link
@@ -20,7 +28,9 @@ const AdminNavBar: React.FC = () => {
         </li>
       </ul>
       <div className="flex-d">
-        <Logout />
+        <button className="btn error-page-btn" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </div>
   );

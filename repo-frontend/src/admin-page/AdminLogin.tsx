@@ -37,9 +37,6 @@ const AdminLogin: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(
-      JSON.stringify({ email: loginData.email, password: loginData.password })
-    );
     axiosInstance
       .post(
         `token/`,

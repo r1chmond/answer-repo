@@ -5,14 +5,16 @@ import ErrorPage from "./user-pages/ErrorPage";
 import ChapterPage from "./user-pages/ChapterPage";
 import SolutionPage from "./user-pages/SolutionPage";
 import "bootstrap/dist/css/bootstrap.css";
-import { createBrowserRouter, RouterProvider, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Answer from "./components/Answer";
 import { loader as solutionListLoader } from "./components/SolutionList";
 import { solutionLoader } from "./components/SolutionList";
 import BlogPostPage from "./user-pages/BlogPostPage";
 import BlogPostForm from "./admin-page/BlogPostForm";
-import AdminLogin from "./admin-page/AdminLogin";
 import AdminHomePage from "./admin-page/AdminHomePage";
+import AdminLoginPage from "./admin-page/components/AdminLoginPage";
+import { AuthProvider } from "./admin-page/AuthContext";
+import ProtectedRoute from "./admin-page/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -46,11 +48,15 @@ const router = createBrowserRouter([
   },
   {
     path: "answer-repo/admin/login",
-    element: <AdminLogin />,
+    element: <AdminLoginPage />,
   },
   {
     path: "answer-repo/admin/feed",
-    element: <AdminHomePage />,
+    element: (
+      <ProtectedRoute>
+        <AdminHomePage />
+      </ProtectedRoute>
+    ),
   },
 ]);
 
@@ -58,6 +64,8 @@ const container = document.getElementById("root")!;
 const root = ReactDOM.createRoot(container);
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );

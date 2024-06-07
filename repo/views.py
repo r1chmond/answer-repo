@@ -92,15 +92,15 @@ class BlogPostView(viewsets.ModelViewSet):
 #             return Response(serializer.data, status=status.HTTP_200_OK)
         
 
-class UserLogout(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+# class UserLogout(APIView):
+#     permission_classes = [permissions.IsAuthenticated]
     
-    @api_view(['POST'])
-    def post(self, request):
-        user = request.user
-        logout(request)
-        print(f'user {user.email} has logged out =============')
-        return Response(status=status.HTTP_200_OK)
+#     @api_view(['POST'])
+#     def post(self, request):
+#         user = request.user
+#         logout(request)
+#         print(f'user {user.email} has logged out =============')
+#         return Response(status=status.HTTP_200_OK)
     
 class BlacklistTokenUpdateView(APIView):
     permission_classes = [permissions.AllowAny]
