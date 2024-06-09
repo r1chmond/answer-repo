@@ -1,37 +1,13 @@
 //TODO: add fetch errors and loading
 
-import { useEffect, useMemo, useState } from "react";
-import BlogPost from "../interface/BlogPostInterface";
-import axios from "axios";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Loading from "./LoadingComponent";
 import ErrorComponent from "./ErrorComponent";
-import FetchError, { fetchErrorMessage } from "../interface/FetchError";
-
-const BASE_URL = "http://127.0.0.1:8000/api";
+import useFetchBlogPosts from "../custom_hook/useFetchBlogPosts";
 
 const BlogPostList = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [error, setError] = useState<FetchError>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      try {
-        const postResponse = await axios.get(`${BASE_URL}/blogposts`);
-        setPosts(postResponse.data);
-      } catch (err) {
-        if (err instanceof Error) {
-          console.error(`${fetchErrorMessage("", "blog posts")}: ${err}`);
-          setError(err);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPosts();
-  }, []);
+  const { posts, error, isLoading } = useFetchBlogPosts();
 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const filteredPosts = useMemo(() => {
@@ -39,7 +15,7 @@ const BlogPostList = () => {
       post.title.toLowerCase().startsWith(searchQuery.toLowerCase())
     );
   }, [posts, searchQuery]);
-  if (loading) {
+  if (isLoading) {
     return (
       <>
         <Loading />

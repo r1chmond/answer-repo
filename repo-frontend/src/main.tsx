@@ -15,6 +15,7 @@ import AdminHomePage from "./admin-page/AdminHomePage";
 import AdminLoginPage from "./admin-page/components/AdminLoginPage";
 import { AuthProvider } from "./admin-page/AuthContext";
 import ProtectedRoute from "./admin-page/ProtectedRoute";
+import AdminBlogPostList from "./admin-page/components/AdminBlogPostList";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <AdminHomePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "answer-repo/admin/site-materials/blogposts",
+    element: (
+      <ProtectedRoute>
+        <AdminBlogPostList />
       </ProtectedRoute>
     ),
   },

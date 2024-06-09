@@ -1,6 +1,6 @@
 import AdminDashboard from "../components/AdminDashboard";
 
-const DashboardTab: React.FC = () => {
+const DashboardTab = () => {
   return (
     <>
       <AdminDashboard />

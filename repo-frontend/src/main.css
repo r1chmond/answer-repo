@@ -318,6 +318,36 @@ form {
 .inp-display {
     display: table-cell;
 }
+#current-user{
+    font-size: var(--font-sml);
+    margin-bottom: 4px;
+}
+#materials-container{
+    margin-top: 30px;
+    font-size: larger;
+}
+
+.materials-card{
+    color: var(--txt-color);
+    width: 200px;
+    height: 60px;
+    margin-right: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid grey 1px;
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+.materials-card:hover {
+    color: grey;
+    background-color: var(--hov-color);
+}
+
+#materials-tb , #materials-bp {
+    text-decoration: none;
+}
 
 /*==================================================================================================*/
 /*Error Page*/

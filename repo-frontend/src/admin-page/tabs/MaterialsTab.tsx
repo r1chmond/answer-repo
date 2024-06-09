@@ -1,11 +1,7 @@
 import SiteMaterials from "../components/SiteMaterials";
 
-const MaterialsTab: React.FC = () => {
-  return (
-    <>
-      <SiteMaterials />
-    </>
-  );
+const MaterialsTab = () => {
+  return <SiteMaterials />;
 };
 
 export default MaterialsTab;

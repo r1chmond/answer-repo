@@ -12,7 +12,7 @@ const AdminHomePage = () => {
 
   const [tab, setTab] = useState<string>(() => {
     const prevLocation = location.state?.from as string;
-    return prevLocation === "materials" ? "materials" : "dashboard";
+    return prevLocation === "materialsPage" ? "materials" : "dashboard";
   });
 
   const selectTab = (nextTab: string): void => {
@@ -48,7 +48,7 @@ const AdminHomePage = () => {
       </ul>
 
       {tab === "dashboard" && <DashboardTab />}
-      {tab === "materails" && <MaterialsTab />}
+      {tab === "materials" && <MaterialsTab />}
       <ScrollTopButton />
     </>
   );

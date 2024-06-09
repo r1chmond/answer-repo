@@ -7,19 +7,19 @@ import axios from "axios";
 const AdminNavBar: React.FC = () => {
   const { logout } = useAuth();
 
-  const [currentUser, setCurrentUser] = useState("");
+  // const [currentUser, setCurrentUser] = useState("");
 
-  useEffect(() => {
-    const fetctCurrentUser = async () => {
-      try {
-        const userResponse = await axios.get(`http://127.0.0.1:8000/api/user/`);
-        setCurrentUser(userResponse.data("email"));
-      } catch (err) {
-        console.error(`failed to get current user ${err}`);
-      }
-    };
-    fetctCurrentUser();
-  });
+  // useEffect(() => {
+  //   const fetctCurrentUser = async () => {
+  //     try {
+  //       const userResponse = await axios.get(`http://127.0.0.1:8000/api/user/`);
+  //       setCurrentUser(userResponse.data("email"));
+  //     } catch (err) {
+  //       console.error(`failed to get current user ${err}`);
+  //     }
+  //   };
+  //   fetctCurrentUser();
+  // });
 
   const handleLogout = async () => {
     try {
@@ -45,7 +45,7 @@ const AdminNavBar: React.FC = () => {
         </li>
       </ul>
       <div className="flex-d">
-        <div>{currentUser}</div>
+        <div id="current-user">{`currentUser`}</div>
         <button className="btn error-page-btn" onClick={handleLogout}>
           Logout
         </button>
