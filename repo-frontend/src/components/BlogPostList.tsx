@@ -75,7 +75,15 @@ const BlogPostList = () => {
             key={post.id}
             to={`blogposts/${post.id}`}
           >
-            <img id="cover-img" src={post.cover_image} alt="cover image" />
+            <img
+              id="cover-img"
+              src={
+                post.images && post.images.length > 0
+                  ? `http://localhost:8000/media/${post.images[0]}`
+                  : ""
+              }
+              alt="cover image"
+            />
             <div className="bp-cover-title-container">
               <p>{post.title}</p>
             </div>

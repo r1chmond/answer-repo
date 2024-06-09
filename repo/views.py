@@ -78,29 +78,6 @@ class BlogPostView(viewsets.ModelViewSet):
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated(), BlogPostAdminUserWritePermission()]
 
-# class UserLogin(APIView):
-#     permission_classes = (permissions.AllowAny,)
-#     authentication_classes = (SessionAuthentication,)
-    
-#     def post(self, request):
-#         data = request.data
-#         serializer = CustomUserLoginSerializer(data=data)
-        
-#         if serializer.is_valid(raise_exception = True):
-#             user = serializer.check_user(data)
-#             login(request, user)
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-        
-
-# class UserLogout(APIView):
-#     permission_classes = [permissions.IsAuthenticated]
-    
-#     @api_view(['POST'])
-#     def post(self, request):
-#         user = request.user
-#         logout(request)
-#         print(f'user {user.email} has logged out =============')
-#         return Response(status=status.HTTP_200_OK)
     
 class BlacklistTokenUpdateView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -126,19 +103,15 @@ class HomeView(APIView):
         
         return Response({'message': 'This is a protected feed.'})
 
-class CustomUserView(viewsets.ModelViewSet):
+class CustomUserView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     serializer_class = CustomUserSerializer
     
-    def get_queryset(self):
-        return User.objects.filter(id=self.request.user.id)
-    def retrieve(self, request, pk=None):
-        user = self.get_object()
-        serializer = self.get_serializer(user) 
-        return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+    def get(self, request):
+        user = request.user
+        user_info = {
+            'email': user.email
+        }
+        return Response(user_info) 
 
-
-# def logout(request):
-#     logout(request)
-#     return JsonResponse({'detail': 'logged out'}, status=200)

@@ -1,9 +1,26 @@
 import { Link } from "react-router-dom";
 import ar_logo from "../../assets/ar_logo.png";
 import { useAuth } from "../AuthContext";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const AdminNavBar: React.FC = () => {
   const { logout } = useAuth();
+
+  const [currentUser, setCurrentUser] = useState("");
+
+  useEffect(() => {
+    const fetctCurrentUser = async () => {
+      try {
+        const userResponse = await axios.get(`http://127.0.0.1:8000/api/user/`);
+        setCurrentUser(userResponse.data("email"));
+      } catch (err) {
+        console.error(`failed to get current user ${err}`);
+      }
+    };
+    fetctCurrentUser();
+  });
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -28,6 +45,7 @@ const AdminNavBar: React.FC = () => {
         </li>
       </ul>
       <div className="flex-d">
+        <div>{currentUser}</div>
         <button className="btn error-page-btn" onClick={handleLogout}>
           Logout
         </button>

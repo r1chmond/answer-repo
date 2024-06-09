@@ -16,14 +16,14 @@ class BookSerializer(serializers.ModelSerializer):
 
 class BlogPostImageSerializer(serializers.ModelSerializer):
     model= BlogPostImage
-    fields = 'image'
+    fields = '__all__'
 
 class BlogPostSerializer(serializers.ModelSerializer):
     images = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = BlogPost
-        fields = ['title', 'content', 'images']
+        fields = '__all__'
     
     # def create(self, validated_data):
     #     logger.debug(f'Validated data: {validated_data} =======================================')

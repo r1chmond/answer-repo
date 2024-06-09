@@ -33,7 +33,7 @@ class CustomUserAdmin(UserAdmin):
         return qs.filter(is_superuser=False)
 
 class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ('category','author','title', 'content')
+    list_display = ('id','category','author','title', 'content')
 
 class BlogPostImageAdmin(admin.ModelAdmin):
     list_display = ('blogpost', 'image')

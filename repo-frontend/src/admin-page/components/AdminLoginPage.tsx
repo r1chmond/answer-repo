@@ -24,7 +24,6 @@ const AdminLoginPage = () => {
     } catch (error) {
       console.error("Failed to login:", error);
       setError("Invalid login attempt");
-      setIsLoggingIn(false);
     } finally {
       setIsLoggingIn(false);
     }
