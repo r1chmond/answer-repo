@@ -75,6 +75,8 @@ th, td {
 }
 .inactive-anchor-link {
     text-decoration: none;
+    background-color: rgba(0,0,0,0);
+    border: none; 
     color: var(--nav-color);
     transition: 0.3s;
 }
@@ -347,6 +349,12 @@ form {
 
 #materials-tb , #materials-bp {
     text-decoration: none;
+}
+
+.search-add-container{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
 }
 
 /*==================================================================================================*/

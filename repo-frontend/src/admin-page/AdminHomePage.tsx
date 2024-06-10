@@ -12,7 +12,7 @@ const AdminHomePage = () => {
 
   const [tab, setTab] = useState<string>(() => {
     const prevLocation = location.state?.from as string;
-    return prevLocation === "materialsPage" ? "materials" : "dashboard";
+    return prevLocation === "blogposts" ? "materials" : "dashboard";
   });
 
   const selectTab = (nextTab: string): void => {
