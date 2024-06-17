@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
+import AdminNavBar from "./components/AdminNavBar";
+import { Form, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
@@ -10,55 +13,95 @@ interface BlogPost {
   connection_platform: string;
   connect_author: string;
   content: string;
-  images: File[];
+  images: string[];
 }
+
+interface JwtPayload {
+  exp: number;
+}
+
+interface JwtSub {
+  sub: string;
+}
+
+const get_token_sub = (token: string) => {
+  if (!token) return "";
+
+  const decoded: JwtSub = jwtDecode(token);
+  return decoded.sub;
+};
+const is_token_expired = (token: string): boolean => {
+  if (!token) return true;
+
+  const decoded: JwtPayload = jwtDecode(token);
+  const currentTime = Date.now() / 1000;
+
+  return decoded.exp < currentTime;
+};
 const BlogPostForm: React.FC = () => {
-  const [blogPost, setBlogPost] = useState<BlogPost>({
+  const [blogPost, setBlogPost] = useState({
     title: "",
-    category: "tutorial",
-    author: "",
-    connection_platform: "email",
+    category: "Tutorial",
+    connection_platform: "Email",
     connect_author: "",
     content: "",
     images: [],
   });
+
+  const navigate = useNavigate();
+  const handleBackToSiteMaterial = () => {
+    navigate("/answer-repo/admin/dashboard/", { state: { from: "blogposts" } });
+  };
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setBlogPost({ ...blogPost, [e.target.name]: e.target.value });
+    setBlogPost({
+      ...blogPost,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setBlogPost({ ...blogPost, images: Array.from(e.target.files) });
-    }
-  };
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setBlogPost({
+  //     ...blogPost,
+  //     [e.target.name]: e.target.value as string,
+  //   });
+  // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", blogPost.title);
     formData.append("category", blogPost.category);
-    formData.append("author", blogPost.author);
     formData.append("connection_platform", blogPost.connection_platform);
-    formData.append("connent_author", blogPost.connect_author);
+    formData.append("connect_author", blogPost.connect_author);
     formData.append("content", blogPost.content);
-    blogPost.images.forEach((image, index) => {
-      formData.append(`images[${index}].image`, image);
+    blogPost.images.forEach((image: string) => {
+      formData.append(`images`, image);
     });
+    let token = localStorage.getItem("access_token");
+    const dec = jwtDecode(token as string);
+    const sub = dec.sub;
+    console.log(sub);
+    if (!token) {
+      alert("You are logged out");
+      navigate("/answer-repo/admin/login/");
+      return;
+    }
+
+    if (is_token_expired(token)) {
+      token = localStorage.getItem("refresh_token");
+    }
 
     try {
-      await axios.post(
-        `${BASE_URL}/blogposts/`,
-        { formData },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post(`${BASE_URL}/blogposts/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `JWT ${token}`,
+        },
+      });
       alert("Post created successfully");
     } catch (err) {
       console.error("Error occured while creating blogpost", err);
@@ -66,10 +109,33 @@ const BlogPostForm: React.FC = () => {
   };
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label> Title</label>
+      <nav className="navbar navbar-dark bg-dark">
+        <AdminNavBar />
+      </nav>
+      <nav id="bc-nav" aria-label="breadcrumb">
+        <ol id="bc-ol" className="breadcrumb">
+          <li id="bc-books" className="breadcrumb-item">
+            <button
+              className="inactive-anchor-link"
+              onClick={handleBackToSiteMaterial}
+            >
+              Site Materials
+            </button>{" "}
+            <span className="greater-than">&#x02AA2;</span>
+          </li>
+          <li className="breadcrumb-item inactive-anchor-link">
+            Blogposts <span className="greater-than">&#x02AA2;</span>
+          </li>
+          <li id="bc-active" className="breadcrumb-item active">
+            create Blogpost
+          </li>
+        </ol>
+      </nav>
+      <Form method="post" className="mb-3" onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label className="form-label"> Title</label>
           <input
+            className="form-control"
             type="text"
             name="title"
             value={blogPost.title}
@@ -77,40 +143,43 @@ const BlogPostForm: React.FC = () => {
             required
           />
         </div>
-        <div>
-          <label>Category </label>
+        <div className="mb-3">
+          <label className="form-label">Category </label>
           <select
+            className="form-select"
             name="category"
             value={blogPost.category}
             onChange={handleChange}
             required
           >
-            <option value="tutorial">Tutorial</option>
-            <option value="news and update">News and Updates</option>
-            <option value="tips and tricks">Tips and Tricks</option>
-            <option value="other">Other</option>
+            <option value="Tutorial">Tutorial</option>
+            <option value="News and Updates">News and Updates</option>
+            <option value="Tips and Tricks">Tips and Tricks</option>
+            <option value="Other">Other</option>
           </select>
         </div>
-        <div>
-          <label>Social Plaform</label>
+        <div className="mb-3">
+          <label className="form-label">Social Plaform</label>
           <select
+            className="form-select"
             name="connection_platform"
             value={blogPost.connection_platform}
             onChange={handleChange}
             required
           >
-            <option value="email">Email</option>
-            <option value="website">Website</option>
-            <option value="twitter(x)">Twitter (X)</option>
-            <option value="instagram">Instagram</option>
-            <option value="github">Github</option>
-            <option value="linkedin">LinkedIn</option>
-            <option value="other">Other</option>
+            <option value="Email">Email</option>
+            <option value="Website">Website</option>
+            <option value="Twitter(x)">Twitter (X)</option>
+            <option value="Instagram">Instagram</option>
+            <option value="Github">Github</option>
+            <option value="Linkedin">LinkedIn</option>
+            <option value="Other">Other</option>
           </select>
         </div>
-        <div>
-          <label>Social ID</label>
+        <div className="mb-3">
+          <label className="form-label">Social UserID</label>
           <input
+            className="form-control"
             type="text"
             name="connect_author"
             value={blogPost.connect_author}
@@ -118,26 +187,38 @@ const BlogPostForm: React.FC = () => {
             required
           />
         </div>
-        <div>
-          <label>Content</label>
+        <div className="mb-3">
+          <label className="form-label">Content</label>
           <textarea
+            className="form-control"
             name="content"
             value={blogPost.content}
             onChange={handleChange}
             required
+            rows={30}
           />
         </div>
-        <div>
-          <label>Images</label>
+        <div className="mb-3">
+          <label htmlFor="formFileMultiple" className="form-label">
+            Images
+          </label>
           <input
+            id="formFileMultiple"
+            className="form-control"
             type="file"
             name="images"
             multiple
-            onChange={handleImageChange}
+            onChange={handleChange}
           />
         </div>
-        <button type="submit">Creat Post</button>
-      </form>
+        <button
+          id="create-post-btn"
+          className="btn error-page-btn"
+          type="submit"
+        >
+          Create Post
+        </button>
+      </Form>
     </>
   );
 };

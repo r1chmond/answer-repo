@@ -357,6 +357,10 @@ form {
     margin-bottom: 15px;
 }
 
+#create-post-btn {
+    margin-top: 15px;
+    margin-bottom: 50px;
+}
 /*==================================================================================================*/
 /*Error Page*/
 .error-page{

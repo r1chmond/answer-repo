@@ -75,7 +75,7 @@ class BlogPost(models.Model):
 
 
 class BlogPostImage(models.Model):
-    blogpost = models.ForeignKey(BlogPost, related_name='images',on_delete=models.CASCADE)
+    blogpost = models.ForeignKey(BlogPost,on_delete=models.CASCADE)
     image = models.ImageField(upload_to=f'blogpost-images/')
 
     def __str__(self,):

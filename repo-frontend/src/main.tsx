@@ -44,10 +44,6 @@ const router = createBrowserRouter([
     element: <BlogPostPage />,
   },
   {
-    path: "answer-repo/admin/blogposts/create",
-    element: <BlogPostForm />,
-  },
-  {
     path: "answer-repo/admin/login",
     element: <AdminLoginPage />,
   },
@@ -64,6 +60,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <AdminBlogPostList />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "answer-repo/admin/site-materials/blogposts/create",
+    element: (
+      <ProtectedRoute>
+        <BlogPostForm />
       </ProtectedRoute>
     ),
   },
