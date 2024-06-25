@@ -64,6 +64,7 @@ class BlogPostAdminUserWritePermission(permissions.BasePermission):
     
 class BlogPostView(viewsets.ModelViewSet):
     serializer_class = BlogPostSerializer
+    permission_classes = []
 
     def get_queryset(self):
         post_id = self.request.query_params.get('post_id')
@@ -78,6 +79,7 @@ class BlogPostView(viewsets.ModelViewSet):
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated(), BlogPostAdminUserWritePermission()]
 
+    
     
 class BlacklistTokenUpdateView(APIView):
     permission_classes = [permissions.AllowAny]
