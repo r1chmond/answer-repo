@@ -1,11 +1,9 @@
-// AuthContext.tsx
 import {
   createContext,
   useState,
   ReactNode,
   useContext,
   useEffect,
-  useLayoutEffect,
 } from "react";
 import axios from "axios";
 
@@ -14,13 +12,10 @@ const STATUS_OK = 200;
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 5000,
-  // headers: {
-  //   Authorization: localStorage.getItem("access_token")
-  //     ? `JWT ${localStorage.getItem("access_token")}`
-  //     : null,
-  //   "Content-Type": "application/json",
-  //   accept: "application/json",
-  // },
+  headers: {
+    "Content-Type": "application/json",
+    accept: "application/json",
+  },
 });
 
 interface AuthContextType {
@@ -35,7 +30,7 @@ const getCookie = (name: string): string | null => {
     const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();
-      if (cookie.substring(0, name.length) === name + "=") {
+      if (cookie.substring(0, name.length + 1) === name + "=") {
         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
         break;
       }
@@ -47,78 +42,89 @@ const getCookie = (name: string): string | null => {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>();
-
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("access_token")
+  );
 
   useEffect(() => {
+    const token = localStorage.getItem("access_token");
     if (token) {
       setIsAuthenticated(true);
     }
   }, []);
 
-  useLayoutEffect(() => {
-    const authRequestInteceptor = axiosInstance.interceptors.request.use(
+  useEffect(() => {
+    // Setup Axios Interceptors for handling expired tokens
+    const requestInterceptor = axiosInstance.interceptors.request.use(
       (config) => {
-        config.headers.Authorization =
-          !config && token ? `JWT ${token}` : config.headers.Authorization;
+        const token = localStorage.getItem("access_token");
+        if (token) {
+          config.headers.Authorization = `JWT ${token}`;
+        }
         return config;
       },
       (error) => Promise.reject(error)
     );
 
-    return () => {
-      axiosInstance.interceptors.request.eject(authRequestInteceptor);
-    };
-  }, [token]);
-
-  useLayoutEffect(() => {
-    const authResponseInterceptor = axiosInstance.interceptors.response.use(
+    const responseInterceptor = axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
-          try {
-            const response = await axiosInstance.get("token/refresh/");
-            setToken(response.data.access);
-            originalRequest.headers.Authorization = `JWT ${response.data.access}`;
-            originalRequest._retry = true;
-            return axiosInstance(originalRequest);
-          } catch (err) {
-            setToken(null);
-            console.log(`error in response interceptor ${err}`);
+          originalRequest._retry = true;
+          const refreshToken = localStorage.getItem("refresh_token");
+          console.log(
+            `response interceptor ----> refresh token ${refreshToken}`
+          );
+          if (refreshToken) {
+            try {
+              const response = await axiosInstance.post("token/refresh/", {
+                refresh: refreshToken,
+              });
+              localStorage.setItem("access_token", response.data.access);
+              axiosInstance.defaults.headers.Authorization = `JWT ${response.data.access}`;
+              originalRequest.headers.Authorization = `JWT ${response.data.access}`;
+              return axiosInstance(originalRequest);
+            } catch (refreshError) {
+              console.error("Token refresh failed", refreshError);
+              setIsAuthenticated(false);
+              throw refreshError;
+            }
           }
         }
         return Promise.reject(error);
       }
     );
+
     return () => {
-      axiosInstance.interceptors.response.eject(authResponseInterceptor);
+      axiosInstance.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.response.eject(responseInterceptor);
     };
-  }, [token]);
+  }, []);
 
   const login = async (email: string | null, password: string | null) => {
     try {
       const response = await axiosInstance.post(`token/`, { email, password });
       if (response.status === STATUS_OK) {
-        setToken(response.data.access);
-        // localStorage.setItem("refresh_token", response.data.refresh);
-        axiosInstance.defaults.headers["Authorization"] = `JWT ${token}`;
+        localStorage.setItem("access_token", response.data.access);
+        localStorage.setItem("refresh_token", response.data.refresh);
+        axiosInstance.defaults.headers[
+          "Authorization"
+        ] = `JWT ${response.data.access}`;
         setIsAuthenticated(true);
       } else {
         throw new Error("Login failed");
       }
     } catch (err) {
-      setToken(null);
       setIsAuthenticated(false);
       throw err;
     }
   };
 
   const logout = async () => {
-    const refreshToken = await axiosInstance.get("token/refresh/");
+    const refreshToken = localStorage.getItem("refresh_token");
     try {
-      await axios.post(
+      await axiosInstance.post(
         "http://127.0.0.1:8000/logout/blacklist/",
         { refresh_token: refreshToken },
         {
@@ -132,10 +138,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       throw new Error("Error during logout");
     }
-    setToken(null);
-    axios.defaults.headers["Authorization"] = null;
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    axiosInstance.defaults.headers["Authorization"] = null;
     setIsAuthenticated(false);
   };
+
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}

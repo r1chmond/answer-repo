@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, status
 # from rest_framework.permissions import BasePermission,SAFE_METHODS
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from django.contrib.auth import login, logout
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -64,14 +64,13 @@ class BlogPostAdminUserWritePermission(permissions.BasePermission):
     
 class BlogPostView(viewsets.ModelViewSet):
     serializer_class = BlogPostSerializer
-    permission_classes = []
 
     def get_queryset(self):
         post_id = self.request.query_params.get('post_id')
         if post_id:
             return BlogPost.objects.filter(id=post_id)
-        else:
-            return BlogPost.objects.all()
+        
+        return BlogPost.objects.all()
     
     
     def get_permissions(self):
@@ -79,8 +78,34 @@ class BlogPostView(viewsets.ModelViewSet):
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated(), BlogPostAdminUserWritePermission()]
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        
+        # Handle images if present
+        images = request.FILES.getlist('images')
+        for image in images:
+            BlogPostImage.objects.create(blogpost_id=serializer.data['id'], image=image)
+        
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers) 
+    # def perform_create(self, serializer):
+    #     serializer.save()
+
+    # def create(self, request):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_create(serializer)
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+class BlogPostImageView(viewsets.ModelViewSet):
+    serializer_class = BlogPostImageSerializer
     
-    
+    def get_queryset(self):
+        return BlogPostImage.objects.all()
+        
 class BlacklistTokenUpdateView(APIView):
     permission_classes = [permissions.AllowAny]
     authentication_classes = ()

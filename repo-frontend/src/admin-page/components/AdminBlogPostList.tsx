@@ -60,7 +60,12 @@ const AdminBlogPostList = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </form>
-        <button className="btn error-page-btn">&#43; Add Blogpost</button>
+        <Link
+          to={`/answer-repo/admin/site-materials/blogposts/create`}
+          className="btn error-page-btn"
+        >
+          &#43; Add Blogpost
+        </Link>
       </div>
       <ul className="list-group bg-dark">
         {filteredPosts.map((post) => (

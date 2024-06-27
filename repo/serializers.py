@@ -4,10 +4,16 @@ from .models import *
 from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
 import logging
+from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    model = User
+    fields = '__all__'
+
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,23 +21,23 @@ class BookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BlogPostImageSerializer(serializers.ModelSerializer):
-    model= BlogPostImage
-    fields = '__all__'
+    class Meta:
+        model= BlogPostImage
+        fields = ['id', 'image']
 
 class BlogPostSerializer(serializers.ModelSerializer):
-    images = serializers.StringRelatedField(many=True)
-
+    author = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = BlogPost
         fields = '__all__'
+        
+    def create(self, validated_data):
+        request = self.context.get('request', None)
+        if request and request.user:
+            validated_data['author'] = request.user
+            return BlogPost.objects.create(**validated_data)
+        return None
     
-    # def create(self, validated_data):
-    #     logger.debug(f'Validated data: {validated_data} =======================================')
-    #     images_data = validated_data.pop('images')
-    #     blogpost = BlogPost.objects.create(**validated_data)
-    #     for image_data in images_data:
-    #         BlogPostImage.objects.create(blogpost=blogpost, **image_data)
-    #     return blogpost
 
 class ChapterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,9 +49,6 @@ class SolutionSerializer(serializers.ModelSerializer):
         model = Solution
         fields = '__all__' 
 
-class CustomUserSerializer(serializers.ModelSerializer):
-    model = User
-    fields = '__all__'
 
 # class CustomUserLoginSerializer(LoginSerializer):
 #     username = None
