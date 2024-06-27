@@ -2,9 +2,10 @@ interface BlogPost {
   id: number;
   category: string;
   author: string;
-  connection_platform: string;
-  connect_author: string;
+  social_platform: string;
+  social_username: string;
   title: string;
+  cover_image: string;
   content: string;
   images: string[];
   date_posted: string;

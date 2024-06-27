@@ -25,7 +25,6 @@ class UserManager(BaseUserManager):
     
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    # needs_password_change = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -59,11 +58,11 @@ class BlogPost(models.Model):
         
     category = models.CharField(max_length=30, choices=PostCategory, default=PostCategory.TUTORIAL) 
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    connection_platform = models.CharField(max_length=12, choices=Platform, default=Platform.EMAIL)
-    connect_author = models.CharField(max_length=50)
+    social_platform = models.CharField(max_length=12, choices=Platform, default=Platform.EMAIL)
+    social_username = models.CharField(max_length=50)
     title = models.CharField(max_length=200)
     content = models.TextField()
-    # cover_image = models.ImageField(upload_to='blogpost-images', blank=True)
+    cover_image = models.ImageField(upload_to='blogpost-cover-images', blank=True)
     date_posted = models.DateField(auto_now_add=True)
     time_posted = models.TimeField(auto_now_add=True)
     

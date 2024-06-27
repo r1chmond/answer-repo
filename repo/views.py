@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import *
 from .models import *
 import logging
@@ -64,6 +65,7 @@ class BlogPostAdminUserWritePermission(permissions.BasePermission):
     
 class BlogPostView(viewsets.ModelViewSet):
     serializer_class = BlogPostSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         post_id = self.request.query_params.get('post_id')
@@ -90,15 +92,7 @@ class BlogPostView(viewsets.ModelViewSet):
         
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers) 
-    # def perform_create(self, serializer):
-    #     serializer.save()
 
-    # def create(self, request):
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_create(serializer)
-    #     headers = self.get_success_headers(serializer.data)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class BlogPostImageView(viewsets.ModelViewSet):
     serializer_class = BlogPostImageSerializer

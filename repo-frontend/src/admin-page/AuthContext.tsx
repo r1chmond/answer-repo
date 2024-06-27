@@ -21,13 +21,6 @@ const STATUS_OK = 200;
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   timeout: 5000,
-  // headers: {
-  //   Authorization: localStorage.getItem("access_token")
-  //     ? `JWT ${localStorage.getItem("access_token")}`
-  //     : null,
-  //   "Content-Type": "application/json",
-  //   accept: "application/json",
-  // },
 });
 
 interface AuthContextType {
@@ -54,8 +47,6 @@ const getCookie = (name: string): string | null => {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // const [token, setToken] = useState<string | null>();
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -94,7 +85,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             originalRequest._retry = true;
             return axiosInstance(originalRequest);
           } catch (err) {
-            // setToken(null);
             console.log(`error in response interceptor ${err}`);
           }
         }
@@ -110,9 +100,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await axiosInstance.post(`token/`, { email, password });
       if (response.status === STATUS_OK) {
-        // setToken(response.data.access);
         InitTokens(response.data.access, response.data.refresh);
-        // localStorage.setItem("refresh_token", response.data.refresh);
         axiosInstance.defaults.headers[
           "Authorization"
         ] = `JWT ${getAccessToken()}`;
@@ -128,11 +116,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    // const refreshToken = await axiosInstance.get("token/refresh/");
     try {
       await axios.post(
         "http://127.0.0.1:8000/logout/blacklist/",
-        { refresh_token: getRefreshToken },
+        { refresh_token: getRefreshToken() },
         {
           withCredentials: true,
           headers: {
@@ -145,7 +132,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       throw new Error("Error during logout");
     }
-    // setToken(null);
     axios.defaults.headers["Authorization"] = null;
     setIsAuthenticated(false);
   };

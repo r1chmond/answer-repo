@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
 import AdminNavBar from "./components/AdminNavBar";
 import { Form, useNavigate } from "react-router-dom";
@@ -10,46 +10,15 @@ import {
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
-// interface BlogPost {
-//   title: string;
-//   category: string;
-//   author: string;
-//   connection_platform: string;
-//   connect_author: string;
-//   content: string;
-//   images: string[];
-// }
-
-// interface JwtPayload {
-//   exp: number;
-// }
-
-// interface JwtSub {
-//   sub: string;
-// }
-
-// const get_token_sub = (token: string) => {
-//   if (!token) return "";
-
-//   const decoded: JwtSub = jwtDecode(token);
-//   return decoded.sub;
-// };
-// const is_token_expired = (token: string): boolean => {
-//   if (!token) return true;
-
-//   const decoded: JwtPayload = jwtDecode(token);
-//   const currentTime = Date.now() / 1000;
-
-//   return decoded.exp < currentTime;
-// };
 const BlogPostForm: React.FC = () => {
   const [blogPost, setBlogPost] = useState({
     title: "",
+    cover_image: null as File | null,
     category: "Tutorial",
-    connection_platform: "Email",
-    connect_author: "",
+    social_platform: "Email",
+    social_username: "",
     content: "",
-    images: [],
+    images: [] as File[],
   });
 
   const navigate = useNavigate();
@@ -57,10 +26,18 @@ const BlogPostForm: React.FC = () => {
     navigate("/answer-repo/admin/dashboard/", { state: { from: "blogposts" } });
   };
 
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      setBlogPost((prevBlogPost) => ({
+        ...prevBlogPost,
+        cover_image: file,
+      }));
+    }
+  };
+
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setBlogPost({
       ...blogPost,
@@ -68,37 +45,29 @@ const BlogPostForm: React.FC = () => {
     });
   };
 
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setBlogPost({
-  //     ...blogPost,
-  //     [e.target.name]: e.target.value as string,
-  //   });
-  // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", blogPost.title);
+    if (blogPost.cover_image) {
+      formData.append(
+        "cover_image",
+        blogPost.cover_image,
+        blogPost.cover_image.name
+      );
+    }
     formData.append("category", blogPost.category);
-    formData.append("connection_platform", blogPost.connection_platform);
-    formData.append("connect_author", blogPost.connect_author);
+    formData.append("social_platform", blogPost.social_platform);
+    formData.append("social_username", blogPost.social_username);
     formData.append("content", blogPost.content);
-    blogPost.images.forEach((image: string) => {
-      formData.append(`images`, image);
-    });
-    // let token = localStorage.getItem("access_token");
-    // const dec = jwtDecode(token as string);
-    // const sub = dec.sub;
-    // console.log(sub);
-    // if (!token) {
-    //   alert("You are logged out");
-    //   navigate("/answer-repo/admin/login/");
-    //   return;
-    // }
-
-    // if (is_token_expired(token)) {
-    //   token = localStorage.getItem("refresh_token");
-    // }
-
+    if (Array.isArray(blogPost.images)) {
+      blogPost.images.forEach((image) => {
+        formData.append("images", image);
+      });
+    }
+    for (const value of formData.values()) {
+      console.log(value);
+    }
     try {
       await axios.post(`${BASE_URL}/blogposts/`, formData, {
         headers: {
@@ -109,16 +78,16 @@ const BlogPostForm: React.FC = () => {
       alert("Post created successfully");
       setBlogPost({
         title: "",
+        cover_image: null,
         category: "Tutorial",
-        connection_platform: "Email",
-        connect_author: "",
+        social_platform: "Email",
+        social_username: "",
         content: "",
         images: [],
       });
     } catch (err: any) {
       console.error("Error occured while creating blogpost", err);
       if (err.response && err.response.status === 401) {
-        // console.log(`cur refresh token ->>${getRefreshToken()}`);
         try {
           const res = await axios.post(
             `${BASE_URL}/token/refresh/`,
@@ -139,9 +108,10 @@ const BlogPostForm: React.FC = () => {
           alert("post successfull created");
           setBlogPost({
             title: "",
+            cover_image: null,
             category: "Tutorial",
-            connection_platform: "Email",
-            connect_author: "",
+            social_platform: "Email",
+            social_username: "",
             content: "",
             images: [],
           });
@@ -188,6 +158,18 @@ const BlogPostForm: React.FC = () => {
           />
         </div>
         <div className="mb-3">
+          <label htmlFor="formFile" className="form-label">
+            Cover Image
+          </label>
+          <input
+            id="formFile"
+            className="form-control"
+            type="file"
+            name="cover_image"
+            onChange={handleImageChange}
+          />
+        </div>
+        <div className="mb-3">
           <label className="form-label">Category </label>
           <select
             className="form-select"
@@ -206,8 +188,8 @@ const BlogPostForm: React.FC = () => {
           <label className="form-label">Social Plaform</label>
           <select
             className="form-select"
-            name="connection_platform"
-            value={blogPost.connection_platform}
+            name="social_platform"
+            value={blogPost.social_platform}
             onChange={handleChange}
             required
           >
@@ -225,8 +207,8 @@ const BlogPostForm: React.FC = () => {
           <input
             className="form-control"
             type="text"
-            name="connect_author"
-            value={blogPost.connect_author}
+            name="social_username"
+            value={blogPost.social_username}
             onChange={handleChange}
             required
           />
@@ -239,7 +221,7 @@ const BlogPostForm: React.FC = () => {
             value={blogPost.content}
             onChange={handleChange}
             required
-            rows={30}
+            rows={28}
           />
         </div>
         <div className="mb-3">
@@ -252,7 +234,7 @@ const BlogPostForm: React.FC = () => {
             type="file"
             name="images"
             multiple
-            onChange={handleChange}
+            onChange={handleImageChange}
           />
         </div>
         <button

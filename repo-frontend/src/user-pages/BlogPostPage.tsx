@@ -70,8 +70,8 @@ const BlogPostPage = () => {
               <div>{post.date_posted}</div>
               <div>{post.author}</div>
               <div>
-                <span>{post.connection_platform}</span>
-                <span>{post.connect_author}</span>
+                <span>{post.social_platform}</span>
+                <span>{post.social_username}</span>
               </div>
             </div>
             <img

@@ -27,6 +27,7 @@ class BlogPostImageSerializer(serializers.ModelSerializer):
 
 class BlogPostSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
+    cover_image = serializers.ImageField(required=False)
     class Meta:
         model = BlogPost
         fields = '__all__'
