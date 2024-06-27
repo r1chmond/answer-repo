@@ -96,6 +96,7 @@ class BlogPostView(viewsets.ModelViewSet):
 
 class BlogPostImageView(viewsets.ModelViewSet):
     serializer_class = BlogPostImageSerializer
+    # parser_classes = (MultiPartParser, FormParser)
     
     def get_queryset(self):
         return BlogPostImage.objects.all()
