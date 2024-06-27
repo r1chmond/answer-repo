@@ -64,7 +64,6 @@ class BlogPostAdminUserWritePermission(permissions.BasePermission):
     
 class BlogPostView(viewsets.ModelViewSet):
     serializer_class = BlogPostSerializer
-    permission_classes = []
 
     def get_queryset(self):
         post_id = self.request.query_params.get('post_id')
@@ -79,19 +78,27 @@ class BlogPostView(viewsets.ModelViewSet):
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated(), BlogPostAdminUserWritePermission()]
 
-    def create(self, request):
-        if request.user.is_authenticated:
-            serializer = self.get_serializer(data=request.data)
-            if serializer.is_valid():
-                self.perform_create(serializer)
-                images = request.FILES.getlist('images')
-                for image in images:
-                    BlogPostImage.objects.create(blogpost=serializer.data, image=image)
-                headers = self.get_success_headers(serializer.data)
-                return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-            return Response(serializer.errors, status=400)
-        return Response({'error':'You must be authenticated to create a post'})
-    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        
+        # Handle images if present
+        images = request.FILES.getlist('images')
+        for image in images:
+            BlogPostImage.objects.create(blogpost_id=serializer.data['id'], image=image)
+        
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers) 
+    # def perform_create(self, serializer):
+    #     serializer.save()
+
+    # def create(self, request):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_create(serializer)
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class BlogPostImageView(viewsets.ModelViewSet):
     serializer_class = BlogPostImageSerializer

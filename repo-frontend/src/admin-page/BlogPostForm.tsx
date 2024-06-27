@@ -1,43 +1,47 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import AdminNavBar from "./components/AdminNavBar";
 import { Form, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import {
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+} from "./TokenService";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
-interface BlogPost {
-  title: string;
-  category: string;
-  author: string;
-  connection_platform: string;
-  connect_author: string;
-  content: string;
-  images: string[];
-}
+// interface BlogPost {
+//   title: string;
+//   category: string;
+//   author: string;
+//   connection_platform: string;
+//   connect_author: string;
+//   content: string;
+//   images: string[];
+// }
 
-interface JwtPayload {
-  exp: number;
-}
+// interface JwtPayload {
+//   exp: number;
+// }
 
-interface JwtSub {
-  sub: string;
-}
+// interface JwtSub {
+//   sub: string;
+// }
 
-const get_token_sub = (token: string) => {
-  if (!token) return "";
+// const get_token_sub = (token: string) => {
+//   if (!token) return "";
 
-  const decoded: JwtSub = jwtDecode(token);
-  return decoded.sub;
-};
-const is_token_expired = (token: string): boolean => {
-  if (!token) return true;
+//   const decoded: JwtSub = jwtDecode(token);
+//   return decoded.sub;
+// };
+// const is_token_expired = (token: string): boolean => {
+//   if (!token) return true;
 
-  const decoded: JwtPayload = jwtDecode(token);
-  const currentTime = Date.now() / 1000;
+//   const decoded: JwtPayload = jwtDecode(token);
+//   const currentTime = Date.now() / 1000;
 
-  return decoded.exp < currentTime;
-};
+//   return decoded.exp < currentTime;
+// };
 const BlogPostForm: React.FC = () => {
   const [blogPost, setBlogPost] = useState({
     title: "",
@@ -81,30 +85,70 @@ const BlogPostForm: React.FC = () => {
     blogPost.images.forEach((image: string) => {
       formData.append(`images`, image);
     });
-    let token = localStorage.getItem("access_token");
-    const dec = jwtDecode(token as string);
-    const sub = dec.sub;
-    console.log(sub);
-    if (!token) {
-      alert("You are logged out");
-      navigate("/answer-repo/admin/login/");
-      return;
-    }
+    // let token = localStorage.getItem("access_token");
+    // const dec = jwtDecode(token as string);
+    // const sub = dec.sub;
+    // console.log(sub);
+    // if (!token) {
+    //   alert("You are logged out");
+    //   navigate("/answer-repo/admin/login/");
+    //   return;
+    // }
 
-    if (is_token_expired(token)) {
-      token = localStorage.getItem("refresh_token");
-    }
+    // if (is_token_expired(token)) {
+    //   token = localStorage.getItem("refresh_token");
+    // }
 
     try {
       await axios.post(`${BASE_URL}/blogposts/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `JWT ${token}`,
+          Authorization: `JWT ${getAccessToken()}`,
         },
       });
       alert("Post created successfully");
-    } catch (err) {
+      setBlogPost({
+        title: "",
+        category: "Tutorial",
+        connection_platform: "Email",
+        connect_author: "",
+        content: "",
+        images: [],
+      });
+    } catch (err: any) {
       console.error("Error occured while creating blogpost", err);
+      if (err.response && err.response.status === 401) {
+        // console.log(`cur refresh token ->>${getRefreshToken()}`);
+        try {
+          const res = await axios.post(
+            `${BASE_URL}/token/refresh/`,
+            { refresh: getRefreshToken() },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          setAccessToken(res.data.access);
+          await axios.post(`${BASE_URL}/blogposts/`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `JWT ${getAccessToken()}`,
+            },
+          });
+          alert("post successfull created");
+          setBlogPost({
+            title: "",
+            category: "Tutorial",
+            connection_platform: "Email",
+            connect_author: "",
+            content: "",
+            images: [],
+          });
+        } catch {
+          console.log("unable to generate new access token");
+        }
+      }
     }
   };
   return (
