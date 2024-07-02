@@ -28,15 +28,26 @@ class BlogPostImageSerializer(serializers.ModelSerializer):
 class BlogPostSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField(read_only=True)
     cover_image = serializers.ImageField(required=False)
+    content_images = BlogPostImageSerializer(many=True, read_only=True)
+    uploaded_images = serializers.ListField(child=serializers.ImageField(allow_empty_file=False, use_url=False), required=False, write_only=True)
+   
     class Meta:
         model = BlogPost
         fields = '__all__'
+       
         
     def create(self, validated_data):
         request = self.context.get('request', None)
         if request and request.user:
             validated_data['author'] = request.user
-            return BlogPost.objects.create(**validated_data)
+            uploaded_images = validated_data.pop('uploaded_images', [])
+            blog_post =  BlogPost.objects.create(**validated_data)
+
+            for image in uploaded_images:
+                BlogPostImage.objects.create(blogpost=blog_post, image=image)
+
+            return blog_post
+        
         return None
     
 

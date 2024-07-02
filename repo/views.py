@@ -80,18 +80,18 @@ class BlogPostView(viewsets.ModelViewSet):
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated(), BlogPostAdminUserWritePermission()]
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_create(serializer)
         
-        # Handle images if present
-        images = request.FILES.getlist('images')
-        for image in images:
-            BlogPostImage.objects.create(blogpost_id=serializer.data['id'], image=image)
+    #     # Handle images if present
+    #     images = request.FILES.getlist('images')
+    #     for image in images:
+    #         BlogPostImage.objects.create(blogpost_id=serializer.data['id'], image=image)
         
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers) 
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers) 
 
 
 class BlogPostImageView(viewsets.ModelViewSet):

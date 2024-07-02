@@ -18,7 +18,7 @@ const BlogPostForm: React.FC = () => {
     social_platform: "Email",
     social_username: "",
     content: "",
-    images: [] as File[],
+    uploaded_images: [] as File[],
   });
 
   const navigate = useNavigate();
@@ -32,6 +32,16 @@ const BlogPostForm: React.FC = () => {
       setBlogPost((prevBlogPost) => ({
         ...prevBlogPost,
         cover_image: file,
+      }));
+    }
+  };
+
+  const handleMultiImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files); // Convert FileList to Array
+      setBlogPost((prevBlogPost) => ({
+        ...prevBlogPost,
+        uploaded_images: filesArray, // Update state with the array of files
       }));
     }
   };
@@ -60,13 +70,15 @@ const BlogPostForm: React.FC = () => {
     formData.append("social_platform", blogPost.social_platform);
     formData.append("social_username", blogPost.social_username);
     formData.append("content", blogPost.content);
-    if (Array.isArray(blogPost.images)) {
-      blogPost.images.forEach((image) => {
-        formData.append("images", image);
-      });
+    for (let i = 0; i < blogPost.uploaded_images.length; i++) {
+      console.log(
+        `===>>> Appending uploaded_image ${i}:`,
+        blogPost.uploaded_images[i]
+      );
+      formData.append("uploaded_images", blogPost.uploaded_images[i]);
     }
-    for (const value of formData.values()) {
-      console.log(value);
+    for (const key of formData.keys()) {
+      console.log(`${key} ==>> ${formData.get(key)}`);
     }
     try {
       await axios.post(`${BASE_URL}/blogposts/`, formData, {
@@ -83,7 +95,7 @@ const BlogPostForm: React.FC = () => {
         social_platform: "Email",
         social_username: "",
         content: "",
-        images: [],
+        uploaded_images: [],
       });
     } catch (err: any) {
       console.error("Error occured while creating blogpost", err);
@@ -113,7 +125,7 @@ const BlogPostForm: React.FC = () => {
             social_platform: "Email",
             social_username: "",
             content: "",
-            images: [],
+            uploaded_images: [],
           });
         } catch {
           console.log("unable to generate new access token");
@@ -214,6 +226,19 @@ const BlogPostForm: React.FC = () => {
           />
         </div>
         <div className="mb-3">
+          <label htmlFor="formFileMultiple" className="form-label">
+            Content Images
+          </label>
+          <input
+            id="formFileMultiple"
+            className="form-control"
+            type="file"
+            name="uploaded_images"
+            multiple
+            onChange={handleMultiImageChange}
+          />
+        </div>
+        <div className="mb-3">
           <label className="form-label">Content</label>
           <textarea
             className="form-control"
@@ -224,19 +249,7 @@ const BlogPostForm: React.FC = () => {
             rows={28}
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="formFileMultiple" className="form-label">
-            Images
-          </label>
-          <input
-            id="formFileMultiple"
-            className="form-control"
-            type="file"
-            name="images"
-            multiple
-            onChange={handleImageChange}
-          />
-        </div>
+
         <button
           id="create-post-btn"
           className="btn error-page-btn"
