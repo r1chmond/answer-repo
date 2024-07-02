@@ -7,6 +7,8 @@ import {
   getRefreshToken,
   setAccessToken,
 } from "./TokenService";
+import { convertToMegabytes } from "./helper";
+import { useDropzone } from "react-dropzone";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
@@ -26,6 +28,15 @@ const BlogPostForm: React.FC = () => {
     navigate("/answer-repo/admin/dashboard/", { state: { from: "blogposts" } });
   };
 
+  const onDrop = (acceptedFiles: File[]) => {
+    setBlogPost((prevBlogPost) => ({
+      ...prevBlogPost,
+      uploaded_images: [...prevBlogPost.uploaded_images, ...acceptedFiles],
+    }));
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
@@ -36,14 +47,25 @@ const BlogPostForm: React.FC = () => {
     }
   };
 
-  const handleMultiImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const filesArray = Array.from(e.target.files); // Convert FileList to Array
-      setBlogPost((prevBlogPost) => ({
+  // const handleMultiImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files) {
+  //     const filesArray = Array.from(e.target.files); // Convert FileList to Array
+  //     setBlogPost((prevBlogPost) => ({
+  //       ...prevBlogPost,
+  //       uploaded_images: filesArray, // Update state with the array of files
+  //     }));
+  //   }
+  // };
+
+  const handleRemoveImage = (index: number) => {
+    setBlogPost((prevBlogPost) => {
+      const updatedImages = [...prevBlogPost.uploaded_images];
+      updatedImages.splice(index, 1); // Remove the image at the specified index
+      return {
         ...prevBlogPost,
-        uploaded_images: filesArray, // Update state with the array of files
-      }));
-    }
+        uploaded_images: updatedImages,
+      };
+    });
   };
 
   const handleChange = (
@@ -70,16 +92,9 @@ const BlogPostForm: React.FC = () => {
     formData.append("social_platform", blogPost.social_platform);
     formData.append("social_username", blogPost.social_username);
     formData.append("content", blogPost.content);
-    for (let i = 0; i < blogPost.uploaded_images.length; i++) {
-      console.log(
-        `===>>> Appending uploaded_image ${i}:`,
-        blogPost.uploaded_images[i]
-      );
-      formData.append("uploaded_images", blogPost.uploaded_images[i]);
-    }
-    for (const key of formData.keys()) {
-      console.log(`${key} ==>> ${formData.get(key)}`);
-    }
+    blogPost.uploaded_images.forEach((image) => {
+      formData.append("uploaded_images", image);
+    });
     try {
       await axios.post(`${BASE_URL}/blogposts/`, formData, {
         headers: {
@@ -88,6 +103,10 @@ const BlogPostForm: React.FC = () => {
         },
       });
       alert("Post created successfully");
+      setBlogPost((prevBlogPost) => ({
+        ...prevBlogPost,
+        cover_image: null,
+      }));
       setBlogPost({
         title: "",
         cover_image: null,
@@ -118,6 +137,10 @@ const BlogPostForm: React.FC = () => {
             },
           });
           alert("post successfull created");
+          setBlogPost((prevBlogPost) => ({
+            ...prevBlogPost,
+            cover_image: null,
+          }));
           setBlogPost({
             title: "",
             cover_image: null,
@@ -127,6 +150,13 @@ const BlogPostForm: React.FC = () => {
             content: "",
             uploaded_images: [],
           });
+          // Reset the file input field (if using a controlled component)
+          const fileInput = document.getElementById(
+            "formFileInput"
+          ) as HTMLInputElement;
+          if (fileInput) {
+            fileInput.value = ""; // Reset the input value to clear the selected file
+          }
         } catch {
           console.log("unable to generate new access token");
         }
@@ -170,11 +200,11 @@ const BlogPostForm: React.FC = () => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="formFile" className="form-label">
+          <label htmlFor="formFileInput" className="form-label">
             Cover Image
           </label>
           <input
-            id="formFile"
+            id="formFileInput"
             className="form-control"
             type="file"
             name="cover_image"
@@ -225,19 +255,30 @@ const BlogPostForm: React.FC = () => {
             required
           />
         </div>
+
         <div className="mb-3">
-          <label htmlFor="formFileMultiple" className="form-label">
-            Content Images
-          </label>
-          <input
-            id="formFileMultiple"
-            className="form-control"
-            type="file"
-            name="uploaded_images"
-            multiple
-            onChange={handleMultiImageChange}
-          />
+          <label>Content Images</label>
+          <div id="dropzone" {...getRootProps()}>
+            <input {...getInputProps()} />
+            <p>Drag 'n' drop image files here, or click to select files</p>
+            <div id="dropzone-add"> &#43; </div>
+          </div>
         </div>
+        <ul>
+          {blogPost.uploaded_images.map((file, index) => (
+            <li key={index}>
+              {file.name} {convertToMegabytes(file.size) + "MB"}
+              <button
+                className="btn"
+                id="delete-upload-btn"
+                type="button"
+                onClick={() => handleRemoveImage(index)}
+              >
+                &#935;
+              </button>
+            </li>
+          ))}
+        </ul>
         <div className="mb-3">
           <label className="form-label">Content</label>
           <textarea

@@ -4,6 +4,7 @@
     --bg-color: rgb(40, 40, 40);
     --dark-color: rgb(28, 33, 37);
     --hov-color: rgb(60, 60, 60);
+    --light-dark-color: #adadad;
     --txt-color: white;
     --nav-color: rgb(177, 232, 232);
     --nav-hov-color: rgb(125, 176, 176);
@@ -360,6 +361,27 @@ form {
 #create-post-btn {
     margin-top: 15px;
     margin-bottom: 50px;
+}
+
+/*==================================================================================================*/
+/*post form page*/
+#dropzone{
+    border: 2px dashed var(--light-dark-color);
+    padding: 20px;
+    text-align: center;
+}
+#dropzone-add {
+    font-size: var(--font-lrg);
+    color: var(--dark-color);
+    background-color: var(--hov-color);
+}
+#delete-upload-btn{
+    color: red;
+    transition: 0.3s;
+}
+
+#delete-upload-btn:hover{
+    color: darkred
 }
 /*==================================================================================================*/
 /*Error Page*/
