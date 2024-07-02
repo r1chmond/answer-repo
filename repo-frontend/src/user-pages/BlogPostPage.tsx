@@ -74,13 +74,8 @@ const BlogPostPage = () => {
                 <span>{post.social_username}</span>
               </div>
             </div>
-            <img
-              src={
-                post.images && post.images.length > 0
-                  ? `http://localhost:8000/media/${post.images[0]}`
-                  : ""
-              }
-            />
+            <img src={post.cover_image ? `${post.cover_image}` : ""} />
+
             <ReactMarkdown
               children={post.content}
               remarkPlugins={[remarkGfm]}

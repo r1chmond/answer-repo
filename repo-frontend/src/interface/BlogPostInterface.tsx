@@ -7,7 +7,6 @@ interface BlogPost {
   title: string;
   cover_image: string;
   content: string;
-  images: string[];
   date_posted: string;
   time_posted: string;
 }
